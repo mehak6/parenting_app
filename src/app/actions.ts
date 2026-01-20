@@ -86,6 +86,52 @@ export async function generateActivity(req: GenerateRequest): Promise<Activity |
 }
 
 function createFallback(req: GenerateRequest): Activity {
+  const isTravel = req.context?.toLowerCase().includes('car') || req.context?.toLowerCase().includes('plane');
+  const isRestaurant = req.context?.toLowerCase().includes('restaurant');
+
+  if (isTravel) {
+    return {
+      id: `fallback-travel-${Date.now()}`,
+      name: "I Spy (Travel Edition)",
+      minAge: 36,
+      maxAge: 120,
+      moods: ["Calm", "Learning"],
+      parentEnergy: "Low",
+      timeRequired: "10min",
+      materials: ["None"],
+      instructions: [
+        "Look out the window or around the car.",
+        "Say 'I spy with my little eye something... [Color]'.",
+        "Take turns guessing!"
+      ],
+      skillFocus: ["Observation", "Vocabulary"],
+      isLowEnergy: true,
+      proTip: "Verbal games are perfect for travel as they require no packing and keep kids engaged."
+    };
+  }
+
+  if (isRestaurant) {
+    return {
+      id: `fallback-restaurant-${Date.now()}`,
+      name: "The Missing Object",
+      minAge: 36,
+      maxAge: 120,
+      moods: ["Calm", "Learning"],
+      parentEnergy: "Low",
+      timeRequired: "10min",
+      materials: ["Table items (spoon, shaker, packet)"],
+      instructions: [
+        "Place 3 items on the table.",
+        "Have your child close their eyes.",
+        "Remove one item. Ask: 'What's missing?'"
+      ],
+      skillFocus: ["Memory", "Attention"],
+      isLowEnergy: true,
+      proTip: "Memory games help pass time quietly while waiting for food."
+    };
+  }
+
+  // Default Fallback
   return {
     id: `fallback-${Date.now()}`,
     name: `Instant ${req.mood} Play`,
