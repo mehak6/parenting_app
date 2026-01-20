@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Mood, ParentEnergy, TimeAvailable } from '../types';
 
 interface ActivityEngineProps {
-  onSuggest: (mood: Mood, energy: ParentEnergy, time: TimeAvailable) => void;
+  onSuggest: (mood: Mood, energy: ParentEnergy) => void;
   onTiredMode: () => void;
 }
 
@@ -14,6 +14,7 @@ const moods: { label: string; value: Mood; icon: string }[] = [
   { label: 'Restless', value: 'Restless', icon: '😫' },
   { label: 'Learning', value: 'Learning', icon: '🧠' },
   { label: 'Creative', value: 'Creative', icon: '🎨' },
+  { label: 'Social', value: 'Social', icon: '👥' },
 ];
 
 const energies: { label: string; value: ParentEnergy; icon: string }[] = [
@@ -22,16 +23,9 @@ const energies: { label: string; value: ParentEnergy; icon: string }[] = [
   { label: 'High', value: 'High', icon: '🔥' },
 ];
 
-const times: { label: string; value: TimeAvailable; icon: string }[] = [
-  { label: '5 min', value: '5min', icon: '⏱️' },
-  { label: '10 min', value: '10min', icon: '⏲️' },
-  { label: '15+ min', value: '15min+', icon: '⏳' },
-];
-
 export default function ActivityEngine({ onSuggest, onTiredMode }: ActivityEngineProps) {
   const [step, setStep] = useState(1);
   const [mood, setMood] = useState<Mood | null>(null);
-  const [energy, setEnergy] = useState<ParentEnergy | null>(null);
 
   const handleMoodSelect = (m: Mood) => {
     setMood(m);
@@ -39,13 +33,8 @@ export default function ActivityEngine({ onSuggest, onTiredMode }: ActivityEngin
   };
 
   const handleEnergySelect = (e: ParentEnergy) => {
-    setEnergy(e);
-    setStep(3);
-  };
-
-  const handleTimeSelect = (t: TimeAvailable) => {
-    if (mood && energy) {
-      onSuggest(mood, energy, t);
+    if (mood) {
+      onSuggest(mood, e);
     }
   };
 
@@ -103,30 +92,6 @@ export default function ActivityEngine({ onSuggest, onTiredMode }: ActivityEngin
                     {e.value === 'Low' ? 'I need to sit or lie down' : e.value === 'Medium' ? 'I can supervise' : 'I can join the play'}
                   </span>
                 </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {step === 3 && (
-        <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-          <button onClick={() => setStep(2)} className="text-blue-600 font-medium flex items-center gap-1">← <span className="text-sm">Back</span></button>
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black bg-gradient-to-r from-green-500 via-teal-500 to-blue-500 text-transparent bg-clip-text pb-1">
-              How much time do you have?
-            </h2>
-            <p className="text-gray-500">Even 5 minutes can make a difference.</p>
-          </div>
-          <div className="flex flex-col gap-4">
-            {times.map((t) => (
-              <button
-                key={t.value}
-                onClick={() => handleTimeSelect(t.value)}
-                className="flex items-center p-6 rounded-2xl border border-gray-100 bg-white/80 hover:border-blue-200 hover:bg-blue-50 transition-all gap-6 shadow-sm"
-              >
-                <span className="text-4xl">{t.icon}</span>
-                <span className="font-bold text-lg text-gray-800">{t.label}</span>
               </button>
             ))}
           </div>

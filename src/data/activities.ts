@@ -587,7 +587,7 @@ export const activities: Activity[] = [
     ],
     skillFocus: ['STEM', 'Astronomy'],
     isLowEnergy: false,
-    proTip: "This hands-on experiment teaches children about the Earth\'s rotation and how ancient civilizations kept time!",
+    proTip: "This hands-on experiment teaches children about the Earth's rotation and how ancient civilizations kept time!",
     context: ['Outdoor', 'Home']
   },
   {
@@ -760,6 +760,291 @@ export const activities: Activity[] = [
     isLowEnergy: false,
     proTip: "Sports like this teach trajectory, force control, and good sportsmanship.",
     context: ['Home']
+  },
+  {
+    id: '41',
+    name: 'Card Memory Match',
+    minAge: 60,
+    maxAge: 120,
+    moods: ['Learning', 'Calm'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Deck of cards'],
+    instructions: [
+      'Select 10 pairs of matching cards (e.g., two Kings, two 7s).',
+      'Shuffle and lay them face down in a grid.',
+      'Take turns flipping two cards. If they match, keep them!'
+    ],
+    skillFocus: ['Memory', 'Concentration'],
+    isLowEnergy: true,
+    proTip: "Memory games strengthen the hippocampus, crucial for learning and retaining new information.",
+    context: ['Home', 'Restaurant', 'Waiting Room']
+  },
+  {
+    id: '42',
+    name: 'War (Simple Card Game)',
+    minAge: 60,
+    maxAge: 120,
+    moods: ['Active', 'Social'],
+    parentEnergy: 'Medium',
+    timeRequired: '15min+',
+    materials: ['Deck of cards'],
+    instructions: [
+      'Deal the entire deck evenly between two players.',
+      'Both flip their top card at the same time.',
+      'The higher card wins both! If it\'s a tie, flip three more for "War".'
+    ],
+    skillFocus: ['Number Value', 'Social Skills'],
+    isLowEnergy: false,
+    proTip: "This classic game teaches greater-than/less-than concepts without feeling like a math lesson.",
+    context: ['Home', 'Restaurant', 'Plane']
+  },
+  {
+    id: '43',
+    name: 'Go Fish',
+    minAge: 48,
+    maxAge: 120,
+    moods: ['Social', 'Calm'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Deck of cards'],
+    instructions: [
+      'Deal 5 cards to each player.',
+      'Ask: "Do you have any... Sevens?"',
+      'If they do, take it. If not, "Go Fish" from the pile!'
+    ],
+    skillFocus: ['Communication', 'Matching'],
+    isLowEnergy: true,
+    proTip: "Asking questions and listening for answers builds foundational communication and turn-taking skills.",
+    context: ['Home', 'Car', 'Waiting Room']
+  },
+  {
+    id: '44',
+    name: 'Card House Builder',
+    minAge: 72,
+    maxAge: 120,
+    moods: ['Creative', 'Calm'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Deck of cards'],
+    instructions: [
+      'Find a flat, stable surface.',
+      'Lean two cards together to form a triangle base.',
+      'Challenge: How high can you build before it tumbles?'
+    ],
+    skillFocus: ['Fine Motor', 'Patience'],
+    isLowEnergy: true,
+    proTip: "Building unstable structures teaches physics concepts like gravity, friction, and balance intuitively.",
+    context: ['Home', 'Restaurant']
+  },
+  {
+    id: '45',
+    name: 'Slapjack',
+    minAge: 60,
+    maxAge: 120,
+    moods: ['Active', 'Social'],
+    parentEnergy: 'Medium',
+    timeRequired: '10min',
+    materials: ['Deck of cards'],
+    instructions: [
+      'Deal cards face down. Players take turns flipping a card onto a center pile.',
+      'If a Jack appears, SLAP the pile!',
+      'First to slap wins the pile.'
+    ],
+    skillFocus: ['Reflexes', 'Attention'],
+    isLowEnergy: false,
+    proTip: "Fast-paced reaction games help improve processing speed and hand-eye coordination.",
+    context: ['Home']
+  },
+  {
+    id: '46',
+    name: 'Balloon Waddle',
+    minAge: 36,
+    maxAge: 120,
+    moods: ['Active'],
+    parentEnergy: 'Medium',
+    timeRequired: '10min',
+    materials: ['Balloon'],
+    instructions: [
+      'Place a balloon between your knees.',
+      'Try to waddle from one side of the room to the other without dropping it.',
+      'If it drops, start over!'
+    ],
+    skillFocus: ['Gross Motor', 'Balance'],
+    isLowEnergy: false,
+    proTip: "This silly walk strengthens core muscles and improves coordination in a fun, low-pressure way.",
+    context: ['Home', 'Outdoor']
+  },
+  {
+    id: '47',
+    name: 'Static Electricity Magic',
+    minAge: 24,
+    maxAge: 84,
+    moods: ['Learning', 'Creative'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['Balloon', 'Wool sweater or Hair'],
+    instructions: [
+      'Rub the balloon on your hair or a sweater.',
+      'Stick it to the wall or make your hair stand up!',
+      'Experiment with picking up small paper scraps.'
+    ],
+    skillFocus: ['Science', 'Observation'],
+    isLowEnergy: true,
+    proTip: "Simple science experiments spark curiosity and introduce the concept of invisible forces.",
+    context: ['Home']
+  },
+  {
+    id: '48',
+    name: 'Balloon Volleyball (Seated)',
+    minAge: 24,
+    maxAge: 120,
+    moods: ['Active', 'Social'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['Balloon', 'String or Tape (net)'],
+    instructions: [
+      'Tie a string between two chairs as a "net".',
+      'Sit on the floor on opposite sides.',
+      'Bat the balloon back and forth without letting it touch the floor.'
+    ],
+    skillFocus: ['Coordination', 'Social Skills'],
+    isLowEnergy: true,
+    proTip: "Seated active play is great for rainy days or when energy is low but engagement is needed.",
+    context: ['Home']
+  },
+  {
+    id: '49',
+    name: 'Balloon Rocket',
+    minAge: 48,
+    maxAge: 120,
+    moods: ['Active', 'Learning'],
+    parentEnergy: 'Medium',
+    timeRequired: '15min+',
+    materials: ['Balloon', 'Straw', 'String', 'Tape'],
+    instructions: [
+      'Thread a long string through a straw and tie ends across the room.',
+      'Tape an inflated (but not tied) balloon to the straw.',
+      'Let go and watch it zoom!'
+    ],
+    skillFocus: ['STEM', 'Physics'],
+    isLowEnergy: false,
+    proTip: "This demonstrates Newton's Third Law: for every action (air pushing out), there is an equal and opposite reaction.",
+    context: ['Home']
+  },
+  {
+    id: '50',
+    name: 'Keep the Balloon Up',
+    minAge: 18,
+    maxAge: 120,
+    moods: ['Active'],
+    parentEnergy: 'Medium',
+    timeRequired: '10min',
+    materials: ['Balloon'],
+    instructions: [
+      'Simple rule: Don\'t let the balloon touch the floor!',
+      'Make it harder: Use only elbows, or only heads.',
+      'Count how many taps you can get.'
+    ],
+    skillFocus: ['Gross Motor', 'Resilience'],
+    isLowEnergy: false,
+    proTip: "A classic for a reason—it builds focus and tracking skills while burning off energy.",
+    context: ['Home', 'Outdoor']
+  },
+  {
+    id: '51',
+    name: 'Dice Exercise Challenge',
+    minAge: 60,
+    maxAge: 120,
+    moods: ['Active'],
+    parentEnergy: 'Medium',
+    timeRequired: '10min',
+    materials: ['Dice'],
+    instructions: [
+      'Assign a move to each number (1=Jump, 2=Spin, etc.).',
+      'Roll the die and do the move!',
+      'Roll two dice: One for the move, one for how many times.'
+    ],
+    skillFocus: ['Gross Motor', 'Math'],
+    isLowEnergy: false,
+    proTip: "Combining movement with number recognition helps kinaesthetic learners grasp math concepts better.",
+    context: ['Home', 'Outdoor', 'Park']
+  },
+  {
+    id: '52',
+    name: 'Pig (Dice Game)',
+    minAge: 72,
+    maxAge: 120,
+    moods: ['Learning', 'Social'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['One Die', 'Paper', 'Pencil'],
+    instructions: [
+      'Roll as many times as you want to add to your score.',
+      'BUT if you roll a 1, you lose all points for that turn!',
+      'First to 50 wins. Teaches risk vs. reward.'
+    ],
+    skillFocus: ['Math', 'Strategy'],
+    isLowEnergy: true,
+    proTip: "This introduces probability and risk management in a simple, engaging format.",
+    context: ['Home', 'Restaurant', 'Plane']
+  },
+  {
+    id: '53',
+    name: 'Race to 100',
+    minAge: 60,
+    maxAge: 120,
+    moods: ['Learning'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Two Dice', 'Paper', 'Pencil'],
+    instructions: [
+      'Roll two dice and add the numbers.',
+      'Keep a running total on paper.',
+      'First player to reach exactly 100 wins.'
+    ],
+    skillFocus: ['Addition', 'Math'],
+    isLowEnergy: true,
+    proTip: "Repeated addition practice builds mental math fluency much faster than worksheets.",
+    context: ['Home', 'Restaurant', 'Waiting Room']
+  },
+  {
+    id: '54',
+    name: 'Draw a Monster',
+    minAge: 60,
+    maxAge: 120,
+    moods: ['Creative', 'Learning'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Die', 'Paper', 'Markers'],
+    instructions: [
+      'Roll for parts: 1st roll = how many eyes, 2nd = how many horns, etc.',
+      'Draw the monster based on the numbers.',
+      'Compare your silly creations!'
+    ],
+    skillFocus: ['Creativity', 'Number recognition'],
+    isLowEnergy: true,
+    proTip: "Restricted creativity (drawing within rules) actually boosts problem-solving imagination.",
+    context: ['Home', 'Restaurant', 'Plane']
+  },
+  {
+    id: '55',
+    name: 'Dice Tower',
+    minAge: 60,
+    maxAge: 120,
+    moods: ['Active', 'Restless'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['3-6 Dice'],
+    instructions: [
+      'Can you stack all the dice into a single tower?',
+      'Try it with your non-dominant hand.',
+      'Try it with one eye closed.'
+    ],
+    skillFocus: ['Fine Motor', 'Focus'],
+    isLowEnergy: true,
+    proTip: "Stacking requires intense concentration and fine motor control, quieting a busy mind.",
+    context: ['Home', 'Restaurant']
   }
 ];
 // Context tags added for Quick Filters

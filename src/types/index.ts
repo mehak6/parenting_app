@@ -1,6 +1,6 @@
 export type AgeGroup = '18-24m' | '2-3y' | '3-4y' | '4-6y' | '6-10y';
 
-export type Mood = 'Active' | 'Calm' | 'Restless' | 'Learning' | 'Creative';
+export type Mood = 'Active' | 'Calm' | 'Restless' | 'Learning' | 'Creative' | 'Social';
 
 export type ParentEnergy = 'Low' | 'Medium' | 'High';
 

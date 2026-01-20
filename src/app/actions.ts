@@ -19,7 +19,7 @@ export async function generateActivity(req: GenerateRequest): Promise<Activity |
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
     const prompt = `
       You are an expert parenting assistant. Suggest ONE unique, age-appropriate activity for a child.
