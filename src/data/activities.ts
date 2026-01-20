@@ -1045,6 +1045,291 @@ export const activities: Activity[] = [
     isLowEnergy: true,
     proTip: "Stacking requires intense concentration and fine motor control, quieting a busy mind.",
     context: ['Home', 'Restaurant']
+  },
+  {
+    id: '56',
+    name: 'Sticky Spider Web',
+    minAge: 24,
+    maxAge: 60,
+    moods: ['Active', 'Creative'],
+    parentEnergy: 'Medium',
+    timeRequired: '15min+',
+    materials: ['Tape', 'Newspaper or lightweight balls'],
+    instructions: [
+      'Use painter\'s tape to make a "web" across a doorway (sticky side facing out).',
+      'Have your child throw crumpled paper or cotton balls at it.',
+      'See how many get stuck!'
+    ],
+    skillFocus: ['Gross Motor', 'Aim'],
+    isLowEnergy: false,
+    proTip: "Throwing at a target helps develop hand-eye coordination and spatial reasoning.",
+    context: ['Home']
+  },
+  {
+    id: '57',
+    name: 'Tape Shape Jump',
+    minAge: 36,
+    maxAge: 84,
+    moods: ['Active', 'Learning'],
+    parentEnergy: 'Medium',
+    timeRequired: '10min',
+    materials: ['Tape'],
+    instructions: [
+      'Tape different shapes (Triangle, Square, Circle) on the floor.',
+      'Call out a shape: "Jump to the Triangle!"',
+      'Make it faster for older kids.'
+    ],
+    skillFocus: ['Shape Recognition', 'Gross Motor'],
+    isLowEnergy: false,
+    proTip: "Combining movement with learning helps reinforce concepts through muscle memory.",
+    context: ['Home']
+  },
+  {
+    id: '58',
+    name: 'Cup Stacking Speed Run',
+    minAge: 60,
+    maxAge: 120,
+    moods: ['Active', 'Restless'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['Cups'],
+    instructions: [
+      'Give your child 12 plastic cups.',
+      'Challenge: Build a 3-2-1 pyramid and take it down as fast as possible.',
+      'Use a stopwatch to race against their own time.'
+    ],
+    skillFocus: ['Coordination', 'Focus'],
+    isLowEnergy: true,
+    proTip: "Speed challenges build executive function by requiring quick planning and execution.",
+    context: ['Home', 'Restaurant']
+  },
+  {
+    id: '59',
+    name: 'Memory Cup Game',
+    minAge: 36,
+    maxAge: 96,
+    moods: ['Calm', 'Learning'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['Cups', 'Small Toy/Coin'],
+    instructions: [
+      'Place a small toy under one of three cups.',
+      'Shuffle the cups around slowly.',
+      'Ask your child to point to the cup with the toy.'
+    ],
+    skillFocus: ['Visual Tracking', 'Memory'],
+    isLowEnergy: true,
+    proTip: "This classic magic trick is actually excellent for developing visual attention and object permanence.",
+    context: ['Home', 'Restaurant', 'Waiting Room']
+  },
+  {
+    id: '60',
+    name: 'Sock Puppets',
+    minAge: 24,
+    maxAge: 72,
+    moods: ['Creative', 'Social'],
+    parentEnergy: 'Medium',
+    timeRequired: '15min+',
+    materials: ['Socks', 'Markers (optional)'],
+    instructions: [
+      'Put socks on your hands.',
+      'Have a conversation or sing a song as puppets.',
+      'Can the puppets dance? Can they whisper?'
+    ],
+    skillFocus: ['Communication', 'Imagination'],
+    isLowEnergy: true,
+    proTip: "Using a puppet can help shy children express feelings they might not say directly.",
+    context: ['Home', 'Car', 'Plane']
+  },
+  {
+    id: '61',
+    name: 'Sock Toss Target',
+    minAge: 18,
+    maxAge: 60,
+    moods: ['Active'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['Socks', 'Laundry Basket or Box'],
+    instructions: [
+      'Roll up socks into balls.',
+      'Place the basket close for toddlers, further for older kids.',
+      'Toss the socks into the basket!'
+    ],
+    skillFocus: ['Gross Motor', 'Coordination'],
+    isLowEnergy: true,
+    proTip: "Trajectory games help children learn to gauge force and distance.",
+    context: ['Home']
+  },
+  {
+    id: '62',
+    name: 'The Floor is Lava',
+    minAge: 36,
+    maxAge: 120,
+    moods: ['Active', 'Creative'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Pillows', 'Cushions'],
+    instructions: [
+      'Scatter pillows on the floor.',
+      'The goal: Cross the room without touching the floor (lava!).',
+      'Jump from pillow to pillow safely.'
+    ],
+    skillFocus: ['Balance', 'Gross Motor'],
+    isLowEnergy: true,
+    proTip: "This game encourages strategic planning and risk assessment in a safe environment.",
+    context: ['Home']
+  },
+  {
+    id: '63',
+    name: 'Pillow Sumo',
+    minAge: 48,
+    maxAge: 120,
+    moods: ['Active', 'Restless'],
+    parentEnergy: 'High',
+    timeRequired: '10min',
+    materials: ['Pillows'],
+    instructions: [
+      'Both players stuff a pillow under their shirt (big belly).',
+      'Try to push the other person out of a circle (safe zone).',
+      'No using hands, only bellies!'
+    ],
+    skillFocus: ['Gross Motor', 'Social Play'],
+    isLowEnergy: false,
+    proTip: "Rough-and-tumble play releases energy and actually strengthens the bond between parent and child.",
+    context: ['Home']
+  },
+  {
+    id: '64',
+    name: 'Rainbow Scribble',
+    minAge: 18,
+    maxAge: 36,
+    moods: ['Creative', 'Calm'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['Crayons', 'Paper'],
+    instructions: [
+      'Tape paper to the table (so it doesn\'t move).',
+      'Let your toddler use different colors to make big scribbles.',
+      'Name the colors as they use them.'
+    ],
+    skillFocus: ['Fine Motor', 'Color Recognition'],
+    isLowEnergy: true,
+    proTip: "For toddlers, the process of marking the paper is more important than the result.",
+    context: ['Home', 'Restaurant']
+  },
+  {
+    id: '65',
+    name: 'Secret Crayon Rubbing',
+    minAge: 48,
+    maxAge: 96,
+    moods: ['Creative', 'Learning'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Crayons', 'Paper', 'Leaves/Coins'],
+    instructions: [
+      'Peel the paper off a crayon.',
+      'Place a leaf or coin under the paper.',
+      'Rub the side of the crayon over it to reveal the hidden texture!'
+    ],
+    skillFocus: ['Fine Motor', 'Observation'],
+    isLowEnergy: true,
+    proTip: "This reveals the 'invisible' textures of the world, sparking scientific curiosity.",
+    context: ['Home', 'Restaurant']
+  },
+  {
+    id: '66',
+    name: 'Stick Drumming',
+    minAge: 18,
+    maxAge: 48,
+    moods: ['Active', 'Restless'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['Stick', 'Pots/Pans or Plastic Containers'],
+    instructions: [
+      'Use sticks as drumsticks.',
+      'Tap on different surfaces (couch, floor, bowl) to hear the difference.',
+      'Play fast, then play slow.'
+    ],
+    skillFocus: ['Rhythm', 'Auditory Discrimination'],
+    isLowEnergy: true,
+    proTip: "Exploring sound differences lays the groundwork for musical ability and phonemic awareness.",
+    context: ['Home', 'Outdoor']
+  },
+  {
+    id: '67',
+    name: 'Chopstick Pick-Up Challenge',
+    minAge: 60,
+    maxAge: 120,
+    moods: ['Learning', 'Calm'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Stick', 'Small items (cotton balls, marshmallows)'],
+    instructions: [
+      'Try to pick up small items using chopsticks (or two sticks).',
+      'Move them from one bowl to another.',
+      'Start with large/soft items like marshmallows.'
+    ],
+    skillFocus: ['Fine Motor', 'Patience'],
+    isLowEnergy: true,
+    proTip: "Using chopsticks builds incredible hand strength and dexterity needed for handwriting.",
+    context: ['Home', 'Restaurant']
+  },
+  {
+    id: '68',
+    name: 'Musical Statues',
+    minAge: 24,
+    maxAge: 120,
+    moods: ['Active', 'Social'],
+    parentEnergy: 'Medium',
+    timeRequired: '10min',
+    materials: ['Music'],
+    instructions: [
+      'Dance while the music plays.',
+      'When the parent pauses the music, FREEZE!',
+      'Hold the pose until the music starts again.'
+    ],
+    skillFocus: ['Listening', 'Self-Regulation'],
+    isLowEnergy: false,
+    proTip: "Stop-and-go games teach inhibitory control, a key executive function skill.",
+    context: ['Home']
+  },
+  {
+    id: '69',
+    name: 'Draw the Music',
+    minAge: 48,
+    maxAge: 120,
+    moods: ['Creative', 'Calm'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Music', 'Paper', 'Crayons'],
+    instructions: [
+      'Play a slow song. Ask: "Draw how this sounds" (long lines, blue colors?).',
+      'Play a fast song. Ask: "Now draw this!" (dots, zigzags, red?).',
+      'Compare the drawings.'
+    ],
+    skillFocus: ['Creativity', 'Emotional Expression'],
+    isLowEnergy: true,
+    proTip: "Connecting auditory inputs to visual expression helps integrate different parts of the brain.",
+    context: ['Home', 'Car']
+  },
+  {
+    id: '70',
+    name: 'Box Car Drive-In',
+    minAge: 24,
+    maxAge: 60,
+    moods: ['Creative', 'Calm'],
+    parentEnergy: 'Medium',
+    timeRequired: '15min+',
+    materials: ['Box', 'Pillows', 'Crayons'],
+    instructions: [
+      'Turn a box into a "car" (draw wheels on the side).',
+      'Put a pillow inside.',
+      'Sit in the car and watch a "movie" (or read a book).'
+    ],
+    skillFocus: ['Imagination', 'Comfort'],
+    isLowEnergy: true,
+    proTip: "Enclosed spaces like boxes provide a sense of security and containment for toddlers.",
+    context: ['Home']
   }
 ];
 // Context tags added for Quick Filters
