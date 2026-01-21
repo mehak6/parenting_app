@@ -55,7 +55,7 @@ export default function Onboarding({ onComplete, onCancel }: OnboardingProps) {
           <div className="mx-auto w-24 h-24 bg-white rounded-full flex items-center justify-center text-6xl shadow-inner mb-4 border-4 border-white">
             {selectedAvatar}
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Let's set up your profile</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Let&apos;s set up your profile</h1>
           <p className="text-gray-500 text-sm mt-1">Personalize your parenting companion</p>
         </div>
 
@@ -84,7 +84,7 @@ export default function Onboarding({ onComplete, onCancel }: OnboardingProps) {
 
           {/* Name Input */}
           <div className="space-y-3">
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Child's Name</label>
+            <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Child&apos;s Name</label>
             <input
               type="text"
               value={name}

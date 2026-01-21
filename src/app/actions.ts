@@ -35,7 +35,7 @@ export async function generateActivity(req: GenerateRequest): Promise<Activity |
       - Child Mood: ${req.mood}
       - Parent Energy Available: ${req.energy}
       - Time Available: ${req.time}
-      ${req.context ? `- **CRITICAL CONTEXT**: The activity MUST happen ${req.context}. Ensure it fits this environment perfectly (e.g., if "in a car", NO loose pieces, NO running; if "restaurant", quiet and seated).` : ''}
+      ${req.context ? `- **CRITICAL CONTEXT**: The activity MUST happen ${req.context}. Ensure it fits this environment perfectly (e.g., if "in a car", NO loose pieces, NO running; if "restaurant", quiet and seated). If the context specifies "using [Material]", the activity MUST use that material as the primary tool.` : ''}
       
       **Safety & Appropriateness Protocol:**
       - STRICTLY ensure the activity is safe for a child of age group ${req.ageGroup}.
@@ -130,8 +130,10 @@ function createFallback(req: GenerateRequest): Activity {
   }
 
   // Material-based Fallback
-  if (req.materials && req.materials.length > 0) {
-    const item = req.materials[0];
+  const contextMaterial = req.context?.match(/using (.*)/i)?.[1];
+  const item = (req.materials && req.materials.length > 0) ? req.materials[0] : contextMaterial;
+
+  if (item) {
     return {
       id: `fallback-material-${Date.now()}`,
       name: `Instant ${item} Fun`,

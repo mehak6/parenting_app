@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mood, ParentEnergy, TimeAvailable } from '../types';
+import { Mood, ParentEnergy } from '../types';
 
 interface ActivityEngineProps {
   onSuggest: (mood: Mood, energy: ParentEnergy) => void;
@@ -64,7 +64,7 @@ export default function ActivityEngine({ onSuggest, onTiredMode }: ActivityEngin
             onClick={onTiredMode}
             className="w-full mt-4 p-4 rounded-xl bg-orange-50 border border-orange-100 text-orange-700 font-semibold flex items-center justify-center gap-2"
           >
-            <span>🥱</span> I'm too tired to move
+            <span>🥱</span> I&apos;m too tired to move
           </button>
         </div>
       )}
@@ -74,7 +74,7 @@ export default function ActivityEngine({ onSuggest, onTiredMode }: ActivityEngin
           <button onClick={() => setStep(1)} className="text-blue-600 font-medium flex items-center gap-1">← <span className="text-sm">Back</span></button>
           <div className="space-y-2">
             <h2 className="text-3xl font-black bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 text-transparent bg-clip-text pb-1">
-              What's your energy level?
+              What&apos;s your energy level?
             </h2>
             <p className="text-gray-500">Be honest - we have ideas for every level.</p>
           </div>

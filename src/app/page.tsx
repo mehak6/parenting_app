@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { App } from '@capacitor/app';
 import Onboarding from '../components/Onboarding';
 import ActivityEngine from '../components/ActivityEngine';
 import ActivityCard from '../components/ActivityCard';
@@ -26,6 +27,23 @@ export default function Home() {
     const [pickingDate, setPickingDate] = useState<string | null>(null);
     const [lastRequest, setLastRequest] = useState<{mood: Mood, energy: ParentEnergy, time: TimeAvailable} | null>(null);
     const [showProfileSwitcher, setShowProfileSwitcher] = useState(false);
+
+    // Handle Hardware Back Button
+    useEffect(() => {
+      const setupBackButton = async () => {
+        const { remove } = await App.addListener('backButton', () => {
+          if (view !== 'home' && view !== 'onboarding') {
+            setView('home');
+          } else {
+            App.exitApp();
+          }
+        });
+        return remove;
+      };
+      
+      const removePromise = setupBackButton();
+      return () => { removePromise.then(remove => remove()); };
+    }, [view]);
       
     useEffect(() => {
       const savedProfiles = localStorage.getItem('child_profiles');
@@ -262,7 +280,7 @@ export default function Home() {
   if (!activeProfile) return <Onboarding onComplete={handleOnboardingComplete} />;
 
   return (
-    <main className="flex-1 flex flex-col bg-gray-50 min-h-screen relative pb-20">
+    <main className="flex-1 flex flex-col bg-gray-50 min-h-screen relative pb-32">
       {generating && (
         <div className="absolute inset-0 z-[100] bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-4">
           <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -305,7 +323,7 @@ export default function Home() {
                   { id: 'Restaurant', label: 'Restaurant', icon: '🍽️', color: 'bg-orange-400' },
                   { id: 'Meltdown', label: 'Calm Down', icon: '🧘', color: 'bg-purple-400' }
                 ].map((loc) => (
-                  <button key={loc.id} onClick={() => handleQuickFilter(loc.id as any)} className="flex-shrink-0 w-40 h-28 rounded-2xl overflow-hidden relative flex flex-col shadow-sm group active:scale-95 transition-all">
+                  <button key={loc.id} onClick={() => handleQuickFilter(loc.id as 'Travel' | 'Restaurant' | 'Rainy' | 'Meltdown')} className="flex-shrink-0 w-40 h-28 rounded-2xl overflow-hidden relative flex flex-col shadow-sm group active:scale-95 transition-all">
                     <div className={`flex-1 flex items-center justify-center text-4xl ${loc.color}`}>{loc.icon}</div>
                     <div className="bg-white p-2 text-center"><span className="text-xs font-bold text-gray-700">{loc.label}</span></div>
                   </button>
@@ -322,7 +340,7 @@ export default function Home() {
           </div>
 
           {/* Bottom Nav Bar */}
-          <nav className="fixed bottom-0 left-0 right-0 h-20 bg-blue-500 flex items-center justify-around px-6 z-50 rounded-t-[40px] shadow-2xl">
+          <nav className="fixed bottom-4 left-4 right-4 h-20 bg-blue-500 flex items-center justify-around px-6 z-50 rounded-[40px] shadow-2xl">
             <button onClick={() => setView('home')} className="text-white text-2xl">🏠</button>
             <button onClick={() => setView('calendar')} className="text-white text-2xl">📅</button>
             <div className="w-16 h-16 bg-white rounded-full -mt-16 border-8 border-gray-50 flex items-center justify-center shadow-lg active:scale-90 transition-all cursor-pointer" onClick={() => handleSuggest('Creative', 'Medium')}>

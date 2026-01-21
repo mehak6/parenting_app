@@ -6,14 +6,12 @@ import {
   startOfMonth, 
   endOfMonth, 
   eachDayOfInterval, 
-  isSameMonth, 
   isSameDay, 
   addMonths, 
   subMonths, 
   getDay,
-  parseISO
 } from 'date-fns';
-import { Activity, ScheduledActivity } from '../types';
+import { ScheduledActivity } from '../types';
 
 interface CalendarViewProps {
   scheduledActivities: ScheduledActivity[];

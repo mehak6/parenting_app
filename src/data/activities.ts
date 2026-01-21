@@ -1734,7 +1734,7 @@ export const activities: Activity[] = [
     skillFocus: ['Memory', 'Social Bonding'],
     isLowEnergy: false,
     proTip: "Shared rituals like handshakes deepen the parent-child connection.",
-    context: ['Home', 'Park', 'Waiting Room']
+    context: ['Home', 'Park', 'Waiting Room', 'Restaurant', 'Car', 'Plane']
   },
   {
     id: '98',
@@ -1780,6 +1780,44 @@ export const activities: Activity[] = [
     isLowEnergy: true,
     proTip: "This teaches the concept of past, present, and future, and delayed gratification.",
     context: ['Home']
+  },
+  {
+    id: '101',
+    name: 'Baby Box Play',
+    minAge: 6,
+    maxAge: 24,
+    moods: ['Calm', 'Learning'],
+    parentEnergy: 'Low',
+    timeRequired: '15min+',
+    materials: ['Cardboard Box', 'Soft Toys'],
+    instructions: [
+      'Place a sturdy box on the floor.',
+      'Put your baby inside with a few safe toys.',
+      'Let them explore the walls and sound of the box.'
+    ],
+    skillFocus: ['Sensory', 'Sitting'],
+    isLowEnergy: true,
+    proTip: "Container play helps babies understand their body boundaries and feel secure.",
+    context: ['Home']
+  },
+  {
+    id: '102',
+    name: 'Cup Drop',
+    minAge: 12,
+    maxAge: 36,
+    moods: ['Learning', 'Focus'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['Plastic Cups', 'Small blocks or toys'],
+    instructions: [
+      'Give your child a cup and a small toy.',
+      'Show them how to drop the toy into the cup.',
+      'Dump it out and repeat! Babies love cause-and-effect.'
+    ],
+    skillFocus: ['Fine Motor', 'Object Permanence'],
+    isLowEnergy: true,
+    proTip: "Repetitive filling and dumping is a schema of play that builds cognitive structures.",
+    context: ['Home', 'Restaurant']
   }
 ];
 // Context tags added for Quick Filters

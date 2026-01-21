@@ -26,7 +26,6 @@ export default function ActivityCard({
   onRemix,
   onClose 
 }: ActivityCardProps) {
-  const [showRemix, setShowRemix] = React.useState(false);
 
   const getImage = (act: Activity) => {
     const mat = act.materials[0]?.toLowerCase() || '';
@@ -48,10 +47,11 @@ export default function ActivityCard({
 
   return (
     <div className="fixed inset-0 z-50 bg-white overflow-y-auto animate-in fade-in slide-in-from-bottom-8 duration-500">
-      <div className="max-w-md mx-auto min-h-screen bg-white pb-28">
+      <div className="max-w-md mx-auto min-h-screen bg-white pb-48">
         
         {/* Dynamic Image Header */}
         <div className="relative h-64 w-full overflow-hidden bg-gray-100">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
             src={getImage(activity)}
             alt={activity.name}
@@ -161,7 +161,7 @@ export default function ActivityCard({
           </div>
         </div>
 
-        <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 pb-12 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
           
           {onRemix && !pickingDate && (
             <div className="flex justify-center gap-2 mb-3 overflow-x-auto pb-1 scrollbar-hide">
@@ -189,7 +189,7 @@ export default function ActivityCard({
                {onSkip && (
                  <button 
                   onClick={onSkip}
-                  className="w-16 h-14 bg-gray-100 text-gray-500 rounded-2xl flex items-center justify-center text-2xl active:scale-90 transition-all border border-gray-200"
+                  className="w-16 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-2xl active:scale-90 transition-all shadow-md shadow-blue-200"
                   title="Next Idea"
                  >
                    🔄
@@ -202,7 +202,7 @@ export default function ActivityCard({
                 }}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 rounded-2xl font-bold text-lg shadow-lg shadow-blue-200 active:scale-95 transition-all"
               >
-                I'm Done! 🎉
+                I&apos;m Done! 🎉
               </button>
             </div>
           )}
