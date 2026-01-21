@@ -131,6 +131,29 @@ function createFallback(req: GenerateRequest): Activity {
     };
   }
 
+  // Material-based Fallback
+  if (req.materials && req.materials.length > 0) {
+    const item = req.materials[0];
+    return {
+      id: `fallback-material-${Date.now()}`,
+      name: `Instant ${item} Fun`,
+      minAge: 18,
+      maxAge: 120,
+      moods: ["Creative", "Active"],
+      parentEnergy: "Low",
+      timeRequired: "10min",
+      materials: [item, "Imagination"],
+      instructions: [
+        `Invent a new game using just the ${item}.`,
+        `Challenge: Can you balance it? Can you hide it?`,
+        `See who can come up with the silliest use for it.`
+      ],
+      skillFocus: ["Creativity", "Improvisation"],
+      isLowEnergy: false,
+      proTip: `Open-ended play with a single object like a ${item} boosts divergent thinking.`
+    };
+  }
+
   // Default Fallback
   return {
     id: `fallback-${Date.now()}`,
