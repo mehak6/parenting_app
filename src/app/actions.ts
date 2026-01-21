@@ -1,5 +1,3 @@
-'use server';
-
 import { genAI } from '../lib/gemini';
 import { Activity, AgeGroup, Mood, ParentEnergy, TimeAvailable } from '../types';
 
