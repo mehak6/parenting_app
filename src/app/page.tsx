@@ -12,6 +12,14 @@ import { activities } from '../data/activities';
 
 import { generateActivity, remixActivity } from './actions';
 
+const AGE_GROUPS = [
+  { label: 'Toddler', value: '18-24m' },
+  { label: 'Preschool', value: '2-3y' },
+  { label: 'Early Years', value: '3-4y' },
+  { label: 'Kindy', value: '4-6y' },
+  { label: 'Big Kid', value: '6-10y' },
+];
+
 export default function Home() {
     const [profiles, setProfiles] = useState<ChildProfile[]>([]);
     const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
@@ -332,6 +340,15 @@ export default function Home() {
     }
   };
 
+  const handleAgeSelect = (age: string) => {
+    if (!activeProfile) return;
+    const updatedProfiles = profiles.map(p => 
+      p.id === activeProfile.id ? { ...p, ageGroup: age as any } : p
+    );
+    setProfiles(updatedProfiles);
+    localStorage.setItem('child_profiles', JSON.stringify(updatedProfiles));
+  };
+
   const handleRemix = async (type: 'Easier' | 'Harder' | 'NoMaterials') => {
     if (!suggestedActivity) return;
     setGenerating(true);
@@ -368,29 +385,32 @@ export default function Home() {
 
       {view === 'home' && (
         <>
-          <header className="px-6 pt-12 pb-4 flex justify-between items-center bg-white sticky top-0 z-50">
+          <header className="px-6 pt-12 pb-2 flex justify-between items-center bg-white sticky top-0 z-50">
             <h1 className="text-3xl font-black text-blue-500 tracking-tight">EXPLORE</h1>
-            <button onClick={() => setShowProfileSwitcher(!showProfileSwitcher)} className="w-10 h-10 rounded-full overflow-hidden border-2 border-blue-100 shadow-sm relative">
-              <div className="w-full h-full flex items-center justify-center bg-blue-50 text-xl">{activeProfile.avatar || '👶'}</div>
-            </button>
-            {showProfileSwitcher && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setShowProfileSwitcher(false)} />
-                <div className="absolute top-24 right-6 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 w-64 z-50 animate-in fade-in slide-in-from-top-2 origin-top-right">
-                  {profiles.map(p => (
-                    <button key={p.id} onClick={() => { setActiveProfileId(p.id); setShowProfileSwitcher(false); }} className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${activeProfileId === p.id ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'}`}>
-                      <span className="text-xl">{p.avatar || '👶'}</span>
-                      <div className="text-left"><span className={`block font-bold text-sm ${activeProfileId === p.id ? 'text-blue-700' : 'text-gray-900'}`}>{p.name}</span><span className="block text-xs text-gray-400">{p.ageGroup}</span></div>
-                    </button>
-                  ))}
-                  <button onClick={() => { setView('onboarding'); setShowProfileSwitcher(false); }} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-blue-600 font-bold border-t border-gray-50 mt-2">+ Add Child</button>
-                </div>
-              </>
-            )}
           </header>
 
           <div className="flex-1 space-y-2">
             
+            {/* Age Group Selector */}
+            <div className="px-6 py-2">
+              <h2 className="text-lg font-bold text-gray-700 mb-3">Age Group</h2>
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                {AGE_GROUPS.map((group) => (
+                  <button
+                    key={group.value}
+                    onClick={() => handleAgeSelect(group.value)}
+                    className={`whitespace-nowrap px-4 py-2 rounded-full border-2 text-sm font-bold transition-all ${
+                      activeProfile.ageGroup === group.value
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                        : 'bg-white text-gray-500 border-gray-200'
+                    }`}
+                  >
+                    {group.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Location Section */}
             <div className="px-6 py-4">
               <h2 className="text-lg font-bold text-gray-700 mb-4">Location</h2>
