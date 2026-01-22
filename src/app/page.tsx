@@ -13,11 +13,11 @@ import { activities } from '../data/activities';
 import { generateActivity, remixActivity } from './actions';
 
 const AGE_GROUPS = [
-  { label: 'Toddler', value: '18-24m' },
-  { label: 'Preschool', value: '2-3y' },
-  { label: 'Early Years', value: '3-4y' },
-  { label: 'Kindy', value: '4-6y' },
-  { label: 'Big Kid', value: '6-10y' },
+  { label: 'Toddler', value: '18-24m', desc: '18-24m' },
+  { label: 'Preschool', value: '2-3y', desc: '2-3y' },
+  { label: 'Early Years', value: '3-4y', desc: '3-4y' },
+  { label: 'Kindy', value: '4-6y', desc: '4-6y' },
+  { label: 'Big Kid', value: '6-10y', desc: '6-10y' },
 ];
 
 export default function Home() {
@@ -412,13 +412,16 @@ export default function Home() {
                   <button
                     key={group.value}
                     onClick={() => handleAgeSelect(group.value)}
-                    className={`whitespace-nowrap px-4 py-2 rounded-full border-2 text-sm font-bold transition-all ${
+                    className={`whitespace-nowrap px-5 py-3 rounded-2xl border-2 transition-all flex flex-col items-center min-w-[100px] ${
                       activeProfile.ageGroup === group.value
                         ? 'bg-blue-600 text-white border-blue-600 shadow-md'
                         : 'bg-white text-gray-500 border-gray-200'
                     }`}
                   >
-                    {group.label}
+                    <span className="text-sm font-black uppercase tracking-tight">{group.label}</span>
+                    <span className={`text-[10px] font-bold mt-0.5 ${activeProfile.ageGroup === group.value ? 'text-blue-100' : 'text-gray-400'}`}>
+                      {group.desc}
+                    </span>
                   </button>
                 ))}
               </div>
