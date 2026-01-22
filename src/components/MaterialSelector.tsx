@@ -18,6 +18,7 @@ const materials = [
   { id: 'Crayons', label: 'Crayons', icon: '🖍️', color: 'bg-teal-100' },
   { id: 'Toys', label: 'Toys', icon: '🧸', color: 'bg-amber-100' },
   { id: 'Stick', label: 'Stick', icon: '🥢', color: 'bg-gray-100' },
+  { id: 'Cards', label: 'Playing Cards', icon: '🃏', color: 'bg-red-100' },
   { id: 'Music', label: 'Music', icon: '🎵', color: 'bg-rose-100' },
 ];
 

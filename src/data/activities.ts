@@ -1818,6 +1818,25 @@ export const activities: Activity[] = [
     isLowEnergy: true,
     proTip: "Repetitive filling and dumping is a schema of play that builds cognitive structures.",
     context: ['Home', 'Restaurant']
+  },
+  {
+    id: '103',
+    name: 'Card Color Sort',
+    minAge: 24,
+    maxAge: 48,
+    moods: ['Learning', 'Focus'],
+    parentEnergy: 'Low',
+    timeRequired: '10min',
+    materials: ['Deck of Cards'],
+    instructions: [
+      'Give your child a pile of cards.',
+      'Ask them to put all the RED cards in one pile and BLACK cards in another.',
+      'Simple sorting builds early math skills!'
+    ],
+    skillFocus: ['Sorting', 'Color Recognition'],
+    isLowEnergy: true,
+    proTip: "Sorting is one of the first mathematical concepts children master.",
+    context: ['Home', 'Restaurant', 'Waiting Room']
   }
 ];
 // Context tags added for Quick Filters

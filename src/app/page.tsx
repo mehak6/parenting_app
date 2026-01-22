@@ -98,34 +98,58 @@ export default function Home() {
       });
     };
 
-    const handleMaterialSelect = async (material: string) => {
+    const MATERIAL_MAPPINGS: Record<string, string[]> = {
+      'Balloon': ['balloon'],
+      'Dice': ['dice', 'die'],
+      'Box': ['box', 'cardboard'],
+      'Paper': ['paper', 'newspaper', 'magazine', 'book'],
+      'Tape': ['tape'],
+      'Cups': ['cup'],
+      'Socks': ['sock'],
+      'Pillows': ['pillow', 'cushion'],
+      'Crayons': ['crayon', 'marker', 'pencil', 'pen'],
+      'Toys': ['toy', 'lego', 'block', 'doll'],
+      'Stick': ['stick', 'twig'],
+      'Music': ['music', 'song'],
+      'Cards': ['card', 'deck']
+    };
+
+    const handleMaterialSelect = async (materialId: string) => {
         if (!activeProfile) return;
-        setLastRequest({ mood: 'Creative', energy: 'Medium', time: '15min+' }); // Default params for material search
+        setLastRequest({ mood: 'Creative', energy: 'Medium', time: '15min+' });
     
         const [minMonths, maxMonths] = getAgeRangeInMonths(activeProfile.ageGroup);
-        const searchCanvas = material.toLowerCase();
-    
-        // 1. Try Local Search with Advanced Sorting
+        
+        // Strict Keyword Matching
+        const targetKeywords = MATERIAL_MAPPINGS[materialId] || [materialId.toLowerCase()];
+
         let filtered = activities.filter(a => {
+          // 1. Age Check
           if (!(a.minAge <= maxMonths && a.maxAge >= minMonths)) return false;
-          const activityMatString = a.materials.join(' ').toLowerCase();
-          return activityMatString.includes(searchCanvas);
+
+          // 2. Material Check (Strict)
+          // Check if ANY of the activity's materials contain ANY of the target keywords
+          return a.materials.some(actMat => {
+            const matLower = actMat.toLowerCase();
+            
+            // Special Exception: Don't match "Cardboard" when looking for "Cards"
+            if (materialId === 'Cards' && matLower.includes('cardboard')) return false;
+
+            return targetKeywords.some(keyword => matLower.includes(keyword));
+          });
         });
 
-        // Sort by "Material Purity" (fewer materials = better match for single-item selection)
+        // Sort by "Material Purity" (fewer materials = better match)
         filtered.sort((a, b) => a.materials.length - b.materials.length);
     
         if (filtered.length > 0) {
           const unseen = filtered.filter(a => !history.includes(a.id));
           if (unseen.length > 0) {
-            // Pick the TOP result (most relevant/simple) instead of random
-            const selection = unseen[0];
-            setSuggestedActivity(selection);
-            updateHistory(selection.id);
+            setSuggestedActivity(unseen[0]); // Pick top match
+            updateHistory(unseen[0].id);
             setView('activity');
             return;
           }
-          // If all seen, pick random to keep it fresh
           setSuggestedActivity(filtered[Math.floor(Math.random() * filtered.length)]);
           setView('activity');
           return;
@@ -134,12 +158,13 @@ export default function Home() {
         // 2. Use AI if no local match
         setGenerating(true);
         try {
+          // Use the Label or ID for context, e.g., "using Cards"
           const aiActivity = await generateActivity({
             ageGroup: activeProfile.ageGroup,
             mood: 'Creative',
             energy: 'Medium',
             time: '15min+',
-            context: `using ${material}`
+            context: `using ${materialId}`
           });
           if (aiActivity) {
             setSuggestedActivity(aiActivity);
