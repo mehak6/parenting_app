@@ -16,6 +16,7 @@ export default function Home() {
     const [profiles, setProfiles] = useState<ChildProfile[]>([]);
     const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const [showSplash, setShowSplash] = useState(true);
     const [generating, setGenerating] = useState(false);
     const [view, setView] = useState<'home' | 'activity' | 'calendar' | 'onboarding'>('home');
     const [suggestedActivity, setSuggestedActivity] = useState<Activity | null>(null);
@@ -44,6 +45,14 @@ export default function Home() {
       const removePromise = setupBackButton();
       return () => { removePromise.then(remove => remove()); };
     }, [view]);
+
+    // Splash Screen Timer
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+      }, 2500);
+      return () => clearTimeout(timer);
+    }, []);
       
     useEffect(() => {
       const savedProfiles = localStorage.getItem('child_profiles');
@@ -94,24 +103,29 @@ export default function Home() {
         setLastRequest({ mood: 'Creative', energy: 'Medium', time: '15min+' }); // Default params for material search
     
         const [minMonths, maxMonths] = getAgeRangeInMonths(activeProfile.ageGroup);
+        const searchCanvas = material.toLowerCase();
     
-        // 1. Try Local Search
-        const filtered = activities.filter(a => {
+        // 1. Try Local Search with Advanced Sorting
+        let filtered = activities.filter(a => {
           if (!(a.minAge <= maxMonths && a.maxAge >= minMonths)) return false;
           const activityMatString = a.materials.join(' ').toLowerCase();
-          return activityMatString.includes(material.toLowerCase());
+          return activityMatString.includes(searchCanvas);
         });
+
+        // Sort by "Material Purity" (fewer materials = better match for single-item selection)
+        filtered.sort((a, b) => a.materials.length - b.materials.length);
     
         if (filtered.length > 0) {
           const unseen = filtered.filter(a => !history.includes(a.id));
           if (unseen.length > 0) {
-            const selection = unseen[Math.floor(Math.random() * unseen.length)];
+            // Pick the TOP result (most relevant/simple) instead of random
+            const selection = unseen[0];
             setSuggestedActivity(selection);
             updateHistory(selection.id);
             setView('activity');
             return;
           }
-          // If all seen, pick random from filtered
+          // If all seen, pick random to keep it fresh
           setSuggestedActivity(filtered[Math.floor(Math.random() * filtered.length)]);
           setView('activity');
           return;
@@ -274,6 +288,17 @@ export default function Home() {
       else alert("Couldn't remix this activity. Try again!");
     } catch (e) { console.error(e); } finally { setGenerating(false); }
   };
+
+  if (showSplash) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 overflow-hidden">
+        <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 tracking-tighter animate-in slide-in-from-left duration-1000 ease-out">
+          Parenting Companion
+        </h1>
+        <p className="mt-4 text-gray-400 animate-in fade-in duration-1000 delay-500">Making every day play day</p>
+      </div>
+    );
+  }
 
   if (loading) return <div className="flex-1 flex items-center justify-center"><div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
   if (view === 'onboarding') return <Onboarding onComplete={handleOnboardingComplete} onCancel={profiles.length > 0 ? () => setView('home') : undefined} />;
