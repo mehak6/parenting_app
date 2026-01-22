@@ -26,6 +26,7 @@ export default function ActivityCard({
   onRemix,
   onClose 
 }: ActivityCardProps) {
+  const [isCompleted, setIsCompleted] = React.useState(false);
 
   const getImage = (act: Activity) => {
     const mat = act.materials[0]?.toLowerCase() || '';
@@ -44,6 +45,36 @@ export default function ActivityCard({
     
     return 'https://images.unsplash.com/photo-1502086223501-686db63fbff4?auto=format&fit=crop&w=800&q=80'; // Default kids playing
   };
+
+  if (isCompleted) {
+    return (
+      <div className="fixed inset-0 z-[100] bg-blue-600 flex flex-col items-center justify-center text-white p-8 text-center animate-in fade-in zoom-in duration-300">
+        <span className="text-8xl mb-6">🎉</span>
+        <h2 className="text-3xl font-black mb-2">High Five!</h2>
+        <p className="text-blue-100 mb-12 italic">&quot;You finished: {activity.name}&quot;</p>
+        
+        <div className="bg-white/10 backdrop-blur-md rounded-[40px] p-8 w-full max-w-sm border border-white/20 shadow-2xl">
+          <p className="text-xl font-bold mb-8">Did you and your child enjoy this?</p>
+          <div className="flex gap-6 justify-center">
+            <button 
+              onClick={onClose}
+              className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center text-5xl shadow-xl active:scale-90 transition-all hover:rotate-3"
+            >
+              👍
+            </button>
+            <button 
+              onClick={onClose}
+              className="w-24 h-24 bg-blue-500/40 rounded-3xl flex items-center justify-center text-5xl shadow-xl active:scale-90 transition-all hover:-rotate-3 border border-white/30"
+            >
+              👎
+            </button>
+          </div>
+        </div>
+        
+        <button onClick={onClose} className="mt-12 text-blue-200 font-bold underline tracking-wide decoration-2 underline-offset-4">Skip Feedback</button>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-white overflow-y-auto animate-in fade-in slide-in-from-bottom-8 duration-500">
@@ -198,7 +229,7 @@ export default function ActivityCard({
                <button
                 onClick={() => {
                   if (onComplete) onComplete();
-                  onClose();
+                  setIsCompleted(true);
                 }}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 rounded-2xl font-bold text-lg shadow-lg shadow-blue-200 active:scale-95 transition-all"
               >
