@@ -9,6 +9,7 @@ import CalendarView from '../components/CalendarView';
 import MaterialSelector from '../components/MaterialSelector';
 import { ChildProfile, Mood, ParentEnergy, TimeAvailable, Activity, ScheduledActivity } from '../types';
 import { activities } from '../data/activities';
+import { getActivityImage } from '../lib/activity-helpers';
 
 import { generateActivity, remixActivity } from './actions';
 
@@ -26,8 +27,9 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [showSplash, setShowSplash] = useState(true);
     const [generating, setGenerating] = useState(false);
-    const [view, setView] = useState<'home' | 'activity' | 'calendar' | 'onboarding'>('home');
+    const [view, setView] = useState<'home' | 'activity' | 'calendar' | 'onboarding' | 'browse'>('home');
     const [suggestedActivity, setSuggestedActivity] = useState<Activity | null>(null);
+    const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
     const [favorites, setFavorites] = useState<Activity[]>([]);
     const [history, setHistory] = useState<string[]>([]);
     
@@ -156,15 +158,8 @@ export default function Home() {
         filtered.sort((a, b) => a.materials.length - b.materials.length);
     
         if (filtered.length > 0) {
-          const unseen = filtered.filter(a => !history.includes(a.id));
-          if (unseen.length > 0) {
-            setSuggestedActivity(unseen[0]); // Pick top match
-            updateHistory(unseen[0].id);
-            setView('activity');
-            return;
-          }
-          setSuggestedActivity(filtered[Math.floor(Math.random() * filtered.length)]);
-          setView('activity');
+          setFilteredActivities(filtered);
+          setView('browse');
           return;
         }
     
@@ -273,14 +268,8 @@ export default function Home() {
     });
     
     if (filtered.length > 0) {
-      const unseen = filtered.filter(a => !history.includes(a.id));
-      if (unseen.length > 0) {
-        setSuggestedActivity(unseen[Math.floor(Math.random() * unseen.length)]);
-        setView('activity');
-        return;
-      }
-      setSuggestedActivity(filtered[Math.floor(Math.random() * filtered.length)]);
-      setView('activity');
+      setFilteredActivities(filtered);
+      setView('browse');
       return;
     }
 
@@ -304,17 +293,8 @@ export default function Home() {
       return moodMatch && energyMatch;
     });
     if (filtered.length > 0) {
-      const unseen = filtered.filter(a => !history.includes(a.id));
-      if (unseen.length > 0) {
-        const selection = unseen[Math.floor(Math.random() * unseen.length)];
-        setSuggestedActivity(selection);
-        updateHistory(selection.id);
-        setView('activity');
-        return;
-      }
-      // If all seen, pick random from filtered
-      setSuggestedActivity(filtered[Math.floor(Math.random() * filtered.length)]);
-      setView('activity');
+      setFilteredActivities(filtered);
+      setView('browse');
       return;
     }
     if (activeProfile) {
@@ -467,7 +447,55 @@ export default function Home() {
       )}
 
       {view === 'activity' && suggestedActivity && (
-        <ActivityCard activity={suggestedActivity} isFavorite={favorites.some(f => f.id === suggestedActivity.id)} pickingDate={pickingDate} onToggleFavorite={() => toggleFavorite(suggestedActivity)} onSchedule={handleScheduleActivity} onComplete={handleCompleteActivity} onSkip={handleSkip} onRemix={handleRemix} onClose={() => setView('home')} />
+        <ActivityCard activity={suggestedActivity} isFavorite={favorites.some(f => f.id === suggestedActivity.id)} pickingDate={pickingDate} onToggleFavorite={() => toggleFavorite(suggestedActivity)} onSchedule={handleScheduleActivity} onComplete={handleCompleteActivity} onSkip={handleSkip} onRemix={handleRemix} onClose={() => setView('browse')} />
+      )}
+
+      {view === 'browse' && (
+        <div className="flex-1 flex flex-col bg-gray-50 min-h-screen relative pb-32">
+           <header className="px-4 pt-8 pb-4 flex items-center justify-between bg-white sticky top-0 z-50">
+             <button onClick={() => setView('home')} className="text-3xl text-gray-400">←</button>
+             <h1 className="text-2xl font-bold text-blue-500 tracking-tight uppercase">ACTIVITIES</h1>
+             <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-xl text-blue-500">
+               {activeProfile?.avatar || '👤'}
+             </div>
+           </header>
+
+           <div className="bg-white px-6 pb-6 shadow-sm">
+             <div className="flex items-center gap-3 border-b border-gray-200 pb-3">
+               <span className="text-gray-400 text-xl">🔍</span>
+               <input type="text" placeholder="Search" className="flex-1 outline-none text-lg text-gray-700 placeholder-gray-400" />
+               <span className="text-gray-400 text-2xl">⚡</span>
+             </div>
+           </div>
+
+           <div className="p-4 grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+             {filteredActivities.map(activity => (
+               <div 
+                 key={activity.id} 
+                 onClick={() => { setSuggestedActivity(activity); setView('activity'); }} 
+                 className="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col active:scale-95 transition-all"
+               >
+                 <div className="relative h-40 bg-gray-100">
+                   {/* eslint-disable-next-line @next/next/no-img-element */}
+                   <img 
+                     src={getActivityImage(activity)} 
+                     alt={activity.name} 
+                     className="w-full h-full object-cover" 
+                   />
+                   <button 
+                     onClick={(e) => { e.stopPropagation(); toggleFavorite(activity); }}
+                     className="absolute top-2 left-2 text-2xl drop-shadow-md active:scale-110 transition-transform"
+                   >
+                     {favorites.some(f => f.id === activity.id) ? '❤️' : '🤍'}
+                   </button>
+                 </div>
+                 <div className="p-4 flex-1 flex items-start">
+                   <h3 className="text-sm font-medium text-gray-700 line-clamp-2 leading-relaxed">{activity.name}</h3>
+                 </div>
+               </div>
+             ))}
+           </div>
+        </div>
       )}
 
       {view === 'calendar' && activeProfile && (
