@@ -26,7 +26,12 @@ export default function Home() {
     // const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]); // Removed multi-select
     const [scheduledActivities, setScheduledActivities] = useState<ScheduledActivity[]>([]);
     const [pickingDate, setPickingDate] = useState<string | null>(null);
-    const [lastRequest, setLastRequest] = useState<{mood: Mood, energy: ParentEnergy, time: TimeAvailable} | null>(null);
+    const [lastRequest, setLastRequest] = useState<
+      | { type: 'material'; materialId: string }
+      | { type: 'mood'; mood: Mood; energy: ParentEnergy; time: TimeAvailable }
+      | { type: 'filter'; scenario: 'Travel' | 'Restaurant' | 'Rainy' | 'Meltdown' }
+      | null
+    >(null);
     const [showProfileSwitcher, setShowProfileSwitcher] = useState(false);
 
     // Handle Hardware Back Button
@@ -116,7 +121,7 @@ export default function Home() {
 
     const handleMaterialSelect = async (materialId: string) => {
         if (!activeProfile) return;
-        setLastRequest({ mood: 'Creative', energy: 'Medium', time: '15min+' });
+        setLastRequest({ type: 'material', materialId });
     
         const [minMonths, maxMonths] = getAgeRangeInMonths(activeProfile.ageGroup);
         
@@ -236,6 +241,8 @@ export default function Home() {
 
   const handleQuickFilter = async (scenario: 'Travel' | 'Restaurant' | 'Rainy' | 'Meltdown') => {
     if (!activeProfile) return;
+    setLastRequest({ type: 'filter', scenario });
+
     let mood: Mood = 'Calm';
     let energy: ParentEnergy = 'Low';
     let context = '';
@@ -256,11 +263,19 @@ export default function Home() {
       if (scenario === 'Meltdown') return (hasContext('Home') || hasContext('Car')) && a.moods.includes('Calm') && a.isLowEnergy;
       return false;
     });
+    
     if (filtered.length > 0) {
+      const unseen = filtered.filter(a => !history.includes(a.id));
+      if (unseen.length > 0) {
+        setSuggestedActivity(unseen[Math.floor(Math.random() * unseen.length)]);
+        setView('activity');
+        return;
+      }
       setSuggestedActivity(filtered[Math.floor(Math.random() * filtered.length)]);
       setView('activity');
       return;
     }
+
     if (activeProfile) {
       setGenerating(true);
       try {
@@ -272,7 +287,7 @@ export default function Home() {
 
   const handleSuggest = async (mood: Mood, energy: ParentEnergy, time: TimeAvailable = '15min+') => {
     if (!activeProfile) return;
-    setLastRequest({ mood, energy, time }); 
+    setLastRequest({ type: 'mood', mood, energy, time }); 
     const [minMonths, maxMonths] = getAgeRangeInMonths(activeProfile.ageGroup);
     const filtered = activities.filter(a => {
       if (!(a.minAge <= maxMonths && a.maxAge >= minMonths)) return false;
@@ -289,6 +304,10 @@ export default function Home() {
         setView('activity');
         return;
       }
+      // If all seen, pick random from filtered
+      setSuggestedActivity(filtered[Math.floor(Math.random() * filtered.length)]);
+      setView('activity');
+      return;
     }
     if (activeProfile) {
       setGenerating(true);
@@ -300,8 +319,17 @@ export default function Home() {
   };
 
   const handleSkip = () => {
-    if (lastRequest) handleSuggest(lastRequest.mood, lastRequest.energy, lastRequest.time);
-    else setSuggestedActivity(activities[Math.floor(Math.random() * activities.length)]);
+    if (lastRequest) {
+      if (lastRequest.type === 'material') {
+        handleMaterialSelect(lastRequest.materialId);
+      } else if (lastRequest.type === 'mood') {
+        handleSuggest(lastRequest.mood, lastRequest.energy, lastRequest.time);
+      } else if (lastRequest.type === 'filter') {
+        handleQuickFilter(lastRequest.scenario);
+      }
+    } else {
+      setSuggestedActivity(activities[Math.floor(Math.random() * activities.length)]);
+    }
   };
 
   const handleRemix = async (type: 'Easier' | 'Harder' | 'NoMaterials') => {
