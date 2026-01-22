@@ -7,7 +7,7 @@ import ActivityEngine from '../components/ActivityEngine';
 import ActivityCard from '../components/ActivityCard';
 import CalendarView from '../components/CalendarView';
 import MaterialSelector from '../components/MaterialSelector';
-import { ChildProfile, Mood, ParentEnergy, TimeAvailable, Activity, ScheduledActivity } from '../types';
+import { ChildProfile, Mood, ParentEnergy, TimeAvailable, Activity, ScheduledActivity, AgeGroup } from '../types';
 import { activities } from '../data/activities';
 import { getActivityImage } from '../lib/activity-helpers';
 
@@ -31,7 +31,6 @@ export default function Home() {
     const [suggestedActivity, setSuggestedActivity] = useState<Activity | null>(null);
     const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
     const [favorites, setFavorites] = useState<Activity[]>([]);
-    const [history, setHistory] = useState<string[]>([]);
     
     // const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]); // Removed multi-select
     const [scheduledActivities, setScheduledActivities] = useState<ScheduledActivity[]>([]);
@@ -42,7 +41,6 @@ export default function Home() {
       | { type: 'filter'; scenario: 'Travel' | 'Restaurant' | 'Rainy' | 'Meltdown' }
       | null
     >(null);
-    const [showProfileSwitcher, setShowProfileSwitcher] = useState(false);
 
     // Handle Hardware Back Button
     useEffect(() => {
@@ -90,8 +88,6 @@ export default function Home() {
       if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
       const savedSchedule = localStorage.getItem('scheduled_activities');
       if (savedSchedule) setScheduledActivities(JSON.parse(savedSchedule));
-      const savedHistory = localStorage.getItem('activity_history');
-      if (savedHistory) setHistory(JSON.parse(savedHistory));
       setLoading(false);
     }, []);
 
@@ -103,14 +99,6 @@ export default function Home() {
       setActiveProfileId(newProfile.id);
       localStorage.setItem('child_profiles', JSON.stringify(updatedProfiles));
       setView('home');
-    };
-
-    const updateHistory = (newId: string) => {
-      setHistory(prev => {
-        const updated = [...prev, newId];
-        localStorage.setItem('activity_history', JSON.stringify(updated));
-        return updated;
-      });
     };
 
     const MATERIAL_MAPPINGS: Record<string, string[]> = {
@@ -138,7 +126,7 @@ export default function Home() {
         // Strict Keyword Matching
         const targetKeywords = MATERIAL_MAPPINGS[materialId] || [materialId.toLowerCase()];
 
-        let filtered = activities.filter(a => {
+        const filtered = activities.filter(a => {
           // 1. Age Check
           if (!(a.minAge <= maxMonths && a.maxAge >= minMonths)) return false;
 
@@ -323,7 +311,7 @@ export default function Home() {
   const handleAgeSelect = (age: string) => {
     if (!activeProfile) return;
     const updatedProfiles = profiles.map(p => 
-      p.id === activeProfile.id ? { ...p, ageGroup: age as any } : p
+      p.id === activeProfile.id ? { ...p, ageGroup: age as AgeGroup } : p
     );
     setProfiles(updatedProfiles);
     localStorage.setItem('child_profiles', JSON.stringify(updatedProfiles));
