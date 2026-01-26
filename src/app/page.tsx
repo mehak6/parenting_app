@@ -14,11 +14,11 @@ import { getActivityImage } from '../lib/activity-helpers';
 import { generateActivity, remixActivity } from './actions';
 
 const AGE_GROUPS = [
-  { label: 'Toddler', value: '18-24m', desc: '18-24m' },
-  { label: 'Preschool', value: '2-3y', desc: '2-3y' },
-  { label: 'Early Years', value: '3-4y', desc: '3-4y' },
-  { label: 'Kindy', value: '4-6y', desc: '4-6y' },
-  { label: 'Big Kid', value: '6-10y', desc: '6-10y' },
+  { label: 'Tiny Steps', value: '12-24m', desc: '12-24m' },
+  { label: 'Play Buddies', value: '2-3y', desc: '2-3y' },
+  { label: 'Curious Cubs', value: '3-4y', desc: '3-4y' },
+  { label: 'Little Thinkers', value: '4-5y', desc: '4-5y' },
+  { label: 'Super Kids', value: '6+y', desc: '6+y' },
 ];
 
 export default function Home() {
@@ -237,12 +237,16 @@ export default function Home() {
 
   const getAgeRangeInMonths = (group: string): [number, number] => {
     switch (group) {
-      case '18-24m': return [18, 24];
+      case '12-24m': return [12, 24];
       case '2-3y': return [24, 36];
       case '3-4y': return [36, 48];
+      case '4-5y': return [48, 60];
+      case '6+y': return [72, 144];
+      // Legacy support
+      case '18-24m': return [18, 24];
       case '4-6y': return [48, 72];
       case '6-10y': return [72, 120];
-      default: return [0, 120];
+      default: return [0, 144];
     }
   };
 

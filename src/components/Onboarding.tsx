@@ -9,11 +9,11 @@ interface OnboardingProps {
 }
 
 const ageGroups: { label: string; value: AgeGroup; desc: string }[] = [
-  { label: 'Toddler', value: '18-24m', desc: '18-24 Months' },
-  { label: 'Preschool', value: '2-3y', desc: '2-3 Years' },
-  { label: 'Early Years', value: '3-4y', desc: '3-4 Years' },
-  { label: 'Kindy', value: '4-6y', desc: '4-6 Years' },
-  { label: 'Big Kid', value: '6-10y', desc: '6-10 Years' },
+  { label: 'Tiny Steps', value: '12-24m', desc: '12-24 Months' },
+  { label: 'Play Buddies', value: '2-3y', desc: '2-3 Years' },
+  { label: 'Curious Cubs', value: '3-4y', desc: '3-4 Years' },
+  { label: 'Little Thinkers', value: '4-5y', desc: '4-5 Years' },
+  { label: 'Super Kids', value: '6+y', desc: '6+ Years' },
 ];
 
 const avatars = ['🦁', '🐰', '🐻', '🦊', '🐸', '🦄', '🚀', '⭐'];

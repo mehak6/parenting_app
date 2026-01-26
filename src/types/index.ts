@@ -1,4 +1,4 @@
-export type AgeGroup = '18-24m' | '2-3y' | '3-4y' | '4-6y' | '6-10y';
+export type AgeGroup = '12-24m' | '2-3y' | '3-4y' | '4-5y' | '6+y';
 
 export type Mood = 'Active' | 'Calm' | 'Restless' | 'Learning' | 'Creative' | 'Social' | 'Focus' | 'Funny' | 'Meaningful' | 'Musical' | 'Competitive';
 
