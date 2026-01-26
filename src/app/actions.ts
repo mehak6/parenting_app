@@ -175,8 +175,47 @@ function createFallback(req: GenerateRequest): Activity {
   };
 }
 
+function createRemixFallback(currentActivity: Activity, modification: 'Easier' | 'Harder' | 'NoMaterials'): Activity {
+  const modified = { ...currentActivity };
+  modified.id = `remix-fallback-${Date.now()}`;
+  
+  if (modification === 'Easier') {
+    modified.name = `${currentActivity.name} (Simplified)`;
+    modified.instructions = [
+      "Let's make this simpler!",
+      ...currentActivity.instructions.slice(0, 2),
+      "Focus on having fun rather than following rules perfectly."
+    ];
+    modified.parentEnergy = 'Low';
+    modified.proTip = "Simplifying the rules helps build confidence and reduces frustration.";
+  } else if (modification === 'Harder') {
+    modified.name = `${currentActivity.name} (Challenge Mode)`;
+    modified.instructions = [
+      ...currentActivity.instructions,
+      "Bonus Challenge: Try doing this with one hand or standing on one leg!",
+      "Time yourself to see how fast you can do it."
+    ];
+    modified.skillFocus = [...currentActivity.skillFocus, "Resilience"];
+    modified.proTip = "Adding constraints or time limits boosts executive function and focus.";
+  } else if (modification === 'NoMaterials') {
+    modified.name = `${currentActivity.name} (Imagination Mode)`;
+    modified.materials = ["Your Imagination", "Invisible props"];
+    modified.instructions = [
+      "Pretend you have the items needed.",
+      ...currentActivity.instructions.map(s => s.replace(/ball|paper|toy/gi, "imaginary object")),
+      "Act it out with big gestures!"
+    ];
+    modified.proTip = "Pretend play is the highest form of thinking in early childhood.";
+  }
+  
+  return modified;
+}
+
 export async function remixActivity(currentActivity: Activity, modification: 'Easier' | 'Harder' | 'NoMaterials'): Promise<Activity | null> {
-  if (!genAI) return null;
+  if (!genAI) {
+    console.warn("GOOGLE_API_KEY is not set. Using offline remix.");
+    return createRemixFallback(currentActivity, modification);
+  }
 
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -232,40 +271,6 @@ export async function remixActivity(currentActivity: Activity, modification: 'Ea
     };
   } catch (error) {
     console.error("Remix Error:", error);
-    
-    // Fallback: Generate a simple modification locally if AI fails
-    const modified = { ...currentActivity };
-    modified.id = `remix-fallback-${Date.now()}`;
-    
-    if (modification === 'Easier') {
-      modified.name = `${currentActivity.name} (Simplified)`;
-      modified.instructions = [
-        "Let's make this simpler!",
-        ...currentActivity.instructions.slice(0, 2), // Fewer steps
-        "Focus on having fun rather than following rules perfectly."
-      ];
-      modified.parentEnergy = 'Low';
-      modified.proTip = "Simplifying the rules helps build confidence and reduces frustration.";
-    } else if (modification === 'Harder') {
-      modified.name = `${currentActivity.name} (Challenge Mode)`;
-      modified.instructions = [
-        ...currentActivity.instructions,
-        "Bonus Challenge: Try doing this with one hand or standing on one leg!",
-        "Time yourself to see how fast you can do it."
-      ];
-      modified.skillFocus = [...currentActivity.skillFocus, "Resilience"];
-      modified.proTip = "Adding constraints or time limits boosts executive function and focus.";
-    } else if (modification === 'NoMaterials') {
-      modified.name = `${currentActivity.name} (Imagination Mode)`;
-      modified.materials = ["Your Imagination", "Invisible props"];
-      modified.instructions = [
-        "Pretend you have the items needed.",
-        ...currentActivity.instructions.map(s => s.replace(/ball|paper|toy/gi, "imaginary object")),
-        "Act it out with big gestures!"
-      ];
-      modified.proTip = "Pretend play is the highest form of thinking in early childhood.";
-    }
-    
-    return modified;
+    return createRemixFallback(currentActivity, modification);
   }
 }
