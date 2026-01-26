@@ -409,14 +409,14 @@ export default function Home() {
                   <button
                     key={group.value}
                     onClick={() => handleAgeSelect(group.value)}
-                    className={`whitespace-nowrap px-5 py-3 rounded-2xl border-2 transition-all flex flex-col items-center min-w-[100px] ${
+                    className={`shrink-0 w-28 px-2 py-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center ${
                       activeProfile.ageGroup === group.value
                         ? 'bg-blue-600 text-white border-blue-600 shadow-md'
                         : 'bg-white text-gray-500 border-gray-200'
                     }`}
                   >
-                    <span className="text-sm font-black uppercase tracking-tight">{group.label}</span>
-                    <span className={`text-[10px] font-bold mt-0.5 ${activeProfile.ageGroup === group.value ? 'text-blue-100' : 'text-gray-400'}`}>
+                    <span className="text-xs font-black uppercase tracking-tight text-center leading-tight">{group.label}</span>
+                    <span className={`text-[10px] font-bold mt-1 ${activeProfile.ageGroup === group.value ? 'text-blue-100' : 'text-gray-400'}`}>
                       {group.desc}
                     </span>
                   </button>
