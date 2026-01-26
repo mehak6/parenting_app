@@ -14,6 +14,7 @@ interface ActivityCardProps {
   onSkip?: () => void;
   onRemix?: (type: 'Easier' | 'Harder' | 'NoMaterials') => void;
   onClose: () => void;
+  onFeedback?: (type: 'positive' | 'negative') => void;
 }
 
 export default function ActivityCard({ 
@@ -25,7 +26,8 @@ export default function ActivityCard({
   onComplete,
   onSkip,
   onRemix,
-  onClose 
+  onClose,
+  onFeedback
 }: ActivityCardProps) {
   const [isCompleted, setIsCompleted] = React.useState(false);
 
@@ -40,13 +42,19 @@ export default function ActivityCard({
           <p className="text-xl font-bold mb-8">Did you and your child enjoy this?</p>
           <div className="flex gap-6 justify-center">
             <button 
-              onClick={onClose}
+              onClick={() => {
+                if (onFeedback) onFeedback('positive');
+                onClose();
+              }}
               className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center text-5xl shadow-xl active:scale-90 transition-all hover:rotate-3"
             >
               👍
             </button>
             <button 
-              onClick={onClose}
+              onClick={() => {
+                if (onFeedback) onFeedback('negative');
+                onClose();
+              }}
               className="w-24 h-24 bg-blue-500/40 rounded-3xl flex items-center justify-center text-5xl shadow-xl active:scale-90 transition-all hover:-rotate-3 border border-white/30"
             >
               👎

@@ -31,6 +31,7 @@ export default function Home() {
     const [suggestedActivity, setSuggestedActivity] = useState<Activity | null>(null);
     const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
     const [favorites, setFavorites] = useState<Activity[]>([]);
+    const [feedbackStats, setFeedbackStats] = useState<{positive: number, negative: number}>({ positive: 0, negative: 0 });
     
     // const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]); // Removed multi-select
     const [scheduledActivities, setScheduledActivities] = useState<ScheduledActivity[]>([]);
@@ -88,8 +89,18 @@ export default function Home() {
       if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
       const savedSchedule = localStorage.getItem('scheduled_activities');
       if (savedSchedule) setScheduledActivities(JSON.parse(savedSchedule));
+      const savedFeedback = localStorage.getItem('feedback_stats');
+      if (savedFeedback) setFeedbackStats(JSON.parse(savedFeedback));
       setLoading(false);
     }, []);
+
+    const handleFeedback = (type: 'positive' | 'negative') => {
+        setFeedbackStats(prev => {
+            const updated = { ...prev, [type]: prev[type] + 1 };
+            localStorage.setItem('feedback_stats', JSON.stringify(updated));
+            return updated;
+        });
+    };
 
     const activeProfile = profiles.find(p => p.id === activeProfileId) || null;
   
@@ -429,13 +440,23 @@ export default function Home() {
               <span className="text-3xl">✨</span>
             </div>
             <button onClick={() => setFavorites(favorites)} className="text-white text-2xl">❤️</button>
-            <button onClick={() => setView('onboarding')} className="text-white text-2xl">👤</button>
           </nav>
         </>
       )}
 
       {view === 'activity' && suggestedActivity && (
-        <ActivityCard activity={suggestedActivity} isFavorite={favorites.some(f => f.id === suggestedActivity.id)} pickingDate={pickingDate} onToggleFavorite={() => toggleFavorite(suggestedActivity)} onSchedule={handleScheduleActivity} onComplete={handleCompleteActivity} onSkip={handleSkip} onRemix={handleRemix} onClose={() => setView('browse')} />
+        <ActivityCard 
+          activity={suggestedActivity} 
+          isFavorite={favorites.some(f => f.id === suggestedActivity.id)} 
+          pickingDate={pickingDate} 
+          onToggleFavorite={() => toggleFavorite(suggestedActivity)} 
+          onSchedule={handleScheduleActivity} 
+          onComplete={handleCompleteActivity} 
+          onSkip={handleSkip} 
+          onRemix={handleRemix} 
+          onClose={() => setView('browse')} 
+          onFeedback={handleFeedback}
+        />
       )}
 
       {view === 'browse' && (
