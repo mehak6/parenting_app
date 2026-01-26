@@ -340,18 +340,19 @@ export default function Home() {
     setProfiles(updatedProfiles);
     localStorage.setItem('child_profiles', JSON.stringify(updatedProfiles));
 
-    // Refresh activity based on current context for the new age
-    if (lastRequest) {
-      if (lastRequest.type === 'material') {
-        handleMaterialSelect(lastRequest.materialId);
-      } else if (lastRequest.type === 'mood') {
-        handleSuggest(lastRequest.mood, lastRequest.energy, lastRequest.time);
-      } else if (lastRequest.type === 'filter') {
-        handleQuickFilter(lastRequest.scenario);
-      }
-    } else {
-      handleSuggest('Creative', 'Medium');
-    }
+    // Show ALL activities for this age group (Clear previous filters)
+    setLastRequest(null);
+    
+    const [minMonths, maxMonths] = getAgeRangeInMonths(age);
+    const filtered = activities.filter(a => {
+      return (a.minAge <= maxMonths && a.maxAge >= minMonths);
+    });
+
+    // Sort: Simpler activities first
+    filtered.sort((a, b) => a.materials.length - b.materials.length);
+
+    setFilteredActivities(filtered);
+    setView('browse');
   };
 
   const handleRemix = async (type: 'Easier' | 'Harder' | 'NoMaterials') => {
