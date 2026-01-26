@@ -47,7 +47,11 @@ export default function Home() {
     useEffect(() => {
       const setupBackButton = async () => {
         const { remove } = await App.addListener('backButton', () => {
-          if (view !== 'home' && view !== 'onboarding') {
+          if (view === 'activity') {
+            setView('browse');
+          } else if (view === 'browse') {
+            setView('home');
+          } else if (view !== 'home' && view !== 'onboarding') {
             setView('home');
           } else {
             App.exitApp();
@@ -175,6 +179,7 @@ export default function Home() {
           });
           if (aiActivity) {
             setSuggestedActivity(aiActivity);
+            setFilteredActivities([aiActivity]);
             setView('activity');
           }
         } catch (e) { console.error(e); } finally { setGenerating(false); }
@@ -276,7 +281,11 @@ export default function Home() {
       setGenerating(true);
       try {
         const aiActivity = await generateActivity({ ageGroup: activeProfile.ageGroup, mood, energy, time: '15min+', context });
-        if (aiActivity) { setSuggestedActivity(aiActivity); setView('activity'); }
+        if (aiActivity) { 
+          setSuggestedActivity(aiActivity); 
+          setFilteredActivities([aiActivity]);
+          setView('activity'); 
+        }
       } catch (e) { console.error(e); } finally { setGenerating(false); }
     }
   };
@@ -300,7 +309,11 @@ export default function Home() {
       setGenerating(true);
       try {
         const aiActivity = await generateActivity({ ageGroup: activeProfile.ageGroup, mood, energy, time });
-        if (aiActivity) { setSuggestedActivity(aiActivity); setView('activity'); }
+        if (aiActivity) { 
+          setSuggestedActivity(aiActivity); 
+          setFilteredActivities([aiActivity]);
+          setView('activity'); 
+        }
       } catch (e) { console.error(e); } finally { setGenerating(false); }
     }
   };
