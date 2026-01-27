@@ -12,7 +12,6 @@ interface ActivityCardProps {
   onSchedule?: (date: string) => void;
   onComplete?: () => void;
   onSkip?: () => void;
-  onRemix?: (type: 'Easier' | 'Harder' | 'NoMaterials') => void;
   onClose: () => void;
   onFeedback?: (type: 'positive' | 'negative') => void;
 }
@@ -25,7 +24,6 @@ export default function ActivityCard({
   onSchedule,
   onComplete,
   onSkip,
-  onRemix,
   onClose,
   onFeedback
 }: ActivityCardProps) {
@@ -185,20 +183,6 @@ export default function ActivityCard({
 
         <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 pb-12 bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
           
-          {onRemix && !pickingDate && (
-            <div className="flex justify-center gap-2 mb-3 overflow-x-auto pb-1 scrollbar-hide">
-              <button onClick={() => onRemix('Easier')} className="whitespace-nowrap px-3 py-1 bg-gray-100 rounded-full text-xs font-bold text-gray-600 hover:bg-gray-200 active:scale-95 transition-all">
-                Baby Steps (Easier)
-              </button>
-              <button onClick={() => onRemix('Harder')} className="whitespace-nowrap px-3 py-1 bg-gray-100 rounded-full text-xs font-bold text-gray-600 hover:bg-gray-200 active:scale-95 transition-all">
-                Level Up (Harder)
-              </button>
-              <button onClick={() => onRemix('NoMaterials')} className="whitespace-nowrap px-3 py-1 bg-gray-100 rounded-full text-xs font-bold text-gray-600 hover:bg-gray-200 active:scale-95 transition-all">
-                No Supplies?
-              </button>
-            </div>
-          )}
-
           {pickingDate && onSchedule ? (
             <button
               onClick={() => onSchedule(pickingDate)}

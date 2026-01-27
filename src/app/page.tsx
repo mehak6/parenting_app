@@ -11,7 +11,7 @@ import { ChildProfile, Mood, ParentEnergy, TimeAvailable, Activity, ScheduledAct
 import { activities } from '../data/activities';
 import { getActivityImage } from '../lib/activity-helpers';
 
-import { generateActivity, remixActivity } from './actions';
+import { generateActivity } from './actions';
 
 const AGE_GROUPS = [
   { label: 'Tiny Steps', value: '12-24m', desc: '12-24m' },
@@ -359,16 +359,6 @@ export default function Home() {
     setView('browse');
   };
 
-  const handleRemix = async (type: 'Easier' | 'Harder' | 'NoMaterials') => {
-    if (!suggestedActivity) return;
-    setGenerating(true);
-    try {
-      const remixed = await remixActivity(suggestedActivity, type);
-      if (remixed) setSuggestedActivity(remixed);
-      else alert("Couldn't remix this activity. Try again!");
-    } catch (e) { console.error(e); } finally { setGenerating(false); }
-  };
-
   if (showSplash) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 overflow-hidden">
@@ -471,7 +461,6 @@ export default function Home() {
           onSchedule={handleScheduleActivity} 
           onComplete={handleCompleteActivity} 
           onSkip={handleSkip} 
-          onRemix={handleRemix} 
           onClose={() => setView('browse')} 
           onFeedback={handleFeedback}
         />
