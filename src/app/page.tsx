@@ -31,6 +31,8 @@ export default function Home() {
     const [suggestedActivity, setSuggestedActivity] = useState<Activity | null>(null);
     const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
     const [favorites, setFavorites] = useState<Activity[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [dailyPick, setDailyPick] = useState<Activity | null>(null);
     const [feedbackStats, setFeedbackStats] = useState<{positive: number, negative: number}>({ positive: 0, negative: 0 });
     
     // const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]); // Removed multi-select
@@ -95,6 +97,10 @@ export default function Home() {
       if (savedSchedule) setScheduledActivities(JSON.parse(savedSchedule));
       const savedFeedback = localStorage.getItem('feedback_stats');
       if (savedFeedback) setFeedbackStats(JSON.parse(savedFeedback));
+      
+      // Set Daily Pick
+      setDailyPick(activities[Math.floor(Math.random() * activities.length)]);
+      
       setLoading(false);
     }, []);
 
@@ -346,6 +352,7 @@ export default function Home() {
 
     // Show ALL activities for this age group (Clear previous filters)
     setLastRequest(null);
+    setSearchTerm('');
     
     const [minMonths, maxMonths] = getAgeRangeInMonths(age);
     const filtered = activities.filter(a => {
@@ -390,6 +397,20 @@ export default function Home() {
           </header>
 
           <div className="flex-1 space-y-2">
+
+            {/* Hero Section */}
+            {dailyPick && (
+              <div className="px-6 pb-2 pt-2">
+                <div onClick={() => { setSuggestedActivity(dailyPick); setView('activity'); }} className="relative h-48 rounded-3xl overflow-hidden shadow-lg shadow-blue-200 active:scale-95 transition-all">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={getActivityImage(dailyPick)} className="w-full h-full object-cover" alt="Daily Pick" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-5">
+                    <span className="text-yellow-400 font-bold text-xs uppercase tracking-widest mb-1 drop-shadow-md">✨ Activity of the Day</span>
+                    <h2 className="text-white text-2xl font-black leading-tight drop-shadow-md">{dailyPick.name}</h2>
+                  </div>
+                </div>
+              </div>
+            )}
             
             {/* Age Group Selector */}
             <div className="px-6 py-2">
@@ -439,16 +460,6 @@ export default function Home() {
               <ActivityEngine onSuggest={handleSuggest} onTiredMode={() => handleQuickFilter('Meltdown')} />
             </div>
           </div>
-
-          {/* Bottom Nav Bar */}
-          <nav className="fixed bottom-4 left-4 right-4 h-20 bg-blue-500 flex items-center justify-around px-6 z-50 rounded-[40px] shadow-2xl">
-            <button onClick={() => setView('home')} className="text-white text-2xl">🏠</button>
-            <button onClick={() => setView('calendar')} className="text-white text-2xl">📅</button>
-            <div className="w-16 h-16 bg-white rounded-full -mt-16 border-8 border-gray-50 flex items-center justify-center shadow-lg active:scale-90 transition-all cursor-pointer" onClick={() => handleSuggest('Creative', 'Medium')}>
-              <span className="text-3xl">✨</span>
-            </div>
-            <button onClick={() => setView('favorites')} className="text-white text-2xl">❤️</button>
-          </nav>
         </>
       )}
 
@@ -479,13 +490,26 @@ export default function Home() {
            <div className="bg-white px-6 pb-6 shadow-sm">
              <div className="flex items-center gap-3 border-b border-gray-200 pb-3">
                <span className="text-gray-400 text-xl">🔍</span>
-               <input type="text" placeholder="Search" className="flex-1 outline-none text-lg text-gray-700 placeholder-gray-400" />
-               <span className="text-gray-400 text-2xl">⚡</span>
+               <input 
+                 type="text" 
+                 placeholder="Search activities..." 
+                 className="flex-1 outline-none text-lg text-gray-700 placeholder-gray-400" 
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+               />
+               {searchTerm && (
+                 <button onClick={() => setSearchTerm('')} className="text-gray-400 text-xl">✕</button>
+               )}
              </div>
            </div>
 
            <div className="p-4 grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-             {filteredActivities.map(activity => (
+             {filteredActivities
+               .filter(activity => 
+                 activity.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                 activity.materials.some(m => m.toLowerCase().includes(searchTerm.toLowerCase()))
+               )
+               .map(activity => (
                <div 
                  key={activity.id} 
                  onClick={() => { setSuggestedActivity(activity); setView('activity'); }} 
@@ -564,6 +588,19 @@ export default function Home() {
 
       {view === 'calendar' && activeProfile && (
         <CalendarView scheduledActivities={scheduledActivities.filter(sa => sa.childId === activeProfile.id)} onToggleComplete={toggleScheduleComplete} onAddActivity={(date) => { setPickingDate(date); setView('home'); }} onClose={() => setView('home')} />
+      )}
+
+      {view !== 'activity' && (
+          <nav className="fixed bottom-6 left-6 right-6 h-20 bg-white/90 backdrop-blur-xl flex items-center justify-around px-6 z-50 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/50">
+            <button onClick={() => setView('home')} className={`text-3xl transition-all ${view === 'home' || view === 'browse' ? 'scale-110 drop-shadow-md' : 'opacity-50 grayscale'}`}>🏠</button>
+            <button onClick={() => setView('calendar')} className={`text-3xl transition-all ${view === 'calendar' ? 'scale-110 drop-shadow-md' : 'opacity-50 grayscale'}`}>📅</button>
+            
+            <div className="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-full -mt-12 border-4 border-white flex items-center justify-center shadow-xl shadow-blue-300 active:scale-90 transition-all cursor-pointer" onClick={() => handleSuggest('Creative', 'Medium')}>
+              <span className="text-3xl">✨</span>
+            </div>
+            
+            <button onClick={() => setView('favorites')} className={`text-3xl transition-all ${view === 'favorites' ? 'scale-110 drop-shadow-md' : 'opacity-50 grayscale'}`}>❤️</button>
+          </nav>
       )}
     </main>
   );
