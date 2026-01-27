@@ -55,7 +55,6 @@ export default function CalendarView({
         </button>
         <div className="text-center">
           <h1 className="text-blue-500 font-bold tracking-widest text-sm uppercase">Calendar</h1>
-          <p className="text-gray-400 text-xs">All Profiles</p>
         </div>
         <div className="w-16"></div> {/* Spacer for balance */}
       </div>
