@@ -27,7 +27,7 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [showSplash, setShowSplash] = useState(true);
     const [generating, setGenerating] = useState(false);
-    const [view, setView] = useState<'home' | 'activity' | 'calendar' | 'onboarding' | 'browse'>('home');
+    const [view, setView] = useState<'home' | 'activity' | 'calendar' | 'onboarding' | 'browse' | 'favorites'>('home');
     const [suggestedActivity, setSuggestedActivity] = useState<Activity | null>(null);
     const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
     const [favorites, setFavorites] = useState<Activity[]>([]);
@@ -457,7 +457,7 @@ export default function Home() {
             <div className="w-16 h-16 bg-white rounded-full -mt-16 border-8 border-gray-50 flex items-center justify-center shadow-lg active:scale-90 transition-all cursor-pointer" onClick={() => handleSuggest('Creative', 'Medium')}>
               <span className="text-3xl">✨</span>
             </div>
-            <button onClick={() => setFavorites(favorites)} className="text-white text-2xl">❤️</button>
+            <button onClick={() => setView('favorites')} className="text-white text-2xl">❤️</button>
           </nav>
         </>
       )}
@@ -522,6 +522,54 @@ export default function Home() {
                </div>
              ))}
            </div>
+        </div>
+      )}
+
+      {view === 'favorites' && (
+        <div className="flex-1 flex flex-col bg-gray-50 min-h-screen relative pb-32">
+           <header className="px-4 pt-8 pb-4 flex items-center justify-between bg-white sticky top-0 z-50">
+             <button onClick={() => setView('home')} className="text-3xl text-gray-400">←</button>
+             <h1 className="text-2xl font-bold text-red-500 tracking-tight uppercase">FAVORITES</h1>
+             <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-xl text-blue-500">
+               {activeProfile?.avatar || '👤'}
+             </div>
+           </header>
+
+           {favorites.length === 0 ? (
+             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-gray-400">
+               <span className="text-6xl mb-4">💔</span>
+               <p className="text-lg">No favorites yet!</p>
+               <button onClick={() => setView('home')} className="mt-4 text-blue-500 font-bold">Explore Activities</button>
+             </div>
+           ) : (
+             <div className="p-4 grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+               {favorites.map(activity => (
+                 <div 
+                   key={activity.id} 
+                   onClick={() => { setSuggestedActivity(activity); setView('activity'); }} 
+                   className="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col active:scale-95 transition-all"
+                 >
+                   <div className="relative h-40 bg-gray-100">
+                     {/* eslint-disable-next-line @next/next/no-img-element */}
+                     <img 
+                       src={getActivityImage(activity)} 
+                       alt={activity.name} 
+                       className="w-full h-full object-cover" 
+                     />
+                     <button 
+                       onClick={(e) => { e.stopPropagation(); toggleFavorite(activity); }}
+                       className="absolute top-2 left-2 text-2xl drop-shadow-md active:scale-110 transition-transform"
+                     >
+                       ❤️
+                     </button>
+                   </div>
+                   <div className="p-4 flex-1 flex items-start">
+                     <h3 className="text-sm font-medium text-gray-700 line-clamp-2 leading-relaxed">{activity.name}</h3>
+                   </div>
+                 </div>
+               ))}
+             </div>
+           )}
         </div>
       )}
 
