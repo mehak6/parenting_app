@@ -27,7 +27,7 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [showSplash, setShowSplash] = useState(true);
     const [generating, setGenerating] = useState(false);
-    const [view, setView] = useState<'home' | 'activity' | 'calendar' | 'onboarding' | 'browse' | 'favorites'>('home');
+    const [view, setView] = useState<'home' | 'activity' | 'calendar' | 'onboarding' | 'browse' | 'favorites' | 'settings'>('home');
     const [suggestedActivity, setSuggestedActivity] = useState<Activity | null>(null);
     const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
     const [favorites, setFavorites] = useState<Activity[]>([]);
@@ -394,6 +394,7 @@ export default function Home() {
         <>
           <header className="px-6 pt-12 pb-2 flex justify-between items-center bg-white sticky top-0 z-50">
             <h1 className="text-3xl font-black text-blue-500 tracking-tight">EXPLORE</h1>
+            <button onClick={() => setView('settings')} className="p-2 text-2xl text-gray-400 active:rotate-90 transition-transform">⚙️</button>
           </header>
 
           <div className="flex-1 space-y-2">
@@ -503,37 +504,73 @@ export default function Home() {
              </div>
            </div>
 
-           <div className="p-4 grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-             {filteredActivities
-               .filter(activity => 
-                 activity.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                 activity.materials.some(m => m.toLowerCase().includes(searchTerm.toLowerCase()))
-               )
-               .map(activity => (
-               <div 
-                 key={activity.id} 
-                 onClick={() => { setSuggestedActivity(activity); setView('activity'); }} 
-                 className="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col active:scale-95 transition-all"
-               >
-                 <div className="relative h-40 bg-gray-100">
-                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                   <img 
-                     src={getActivityImage(activity)} 
-                     alt={activity.name} 
-                     className="w-full h-full object-cover" 
-                   />
-                   <button 
-                     onClick={(e) => { e.stopPropagation(); toggleFavorite(activity); }}
-                     className="absolute top-2 left-2 text-2xl drop-shadow-md active:scale-110 transition-transform"
+           <div className="p-4 flex gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 items-start">
+             <div className="flex-1 flex flex-col gap-4">
+               {filteredActivities
+                 .filter(activity => 
+                   activity.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                   activity.materials.some(m => m.toLowerCase().includes(searchTerm.toLowerCase()))
+                 )
+                 .filter((_, i) => i % 2 === 0)
+                 .map(activity => (
+                   <div 
+                     key={activity.id} 
+                     onClick={() => { setSuggestedActivity(activity); setView('activity'); }} 
+                     className="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col active:scale-95 transition-all"
                    >
-                     {favorites.some(f => f.id === activity.id) ? '❤️' : '🤍'}
-                   </button>
-                 </div>
-                 <div className="p-4 flex-1 flex items-start">
-                   <h3 className="text-sm font-medium text-gray-700 line-clamp-2 leading-relaxed">{activity.name}</h3>
-                 </div>
-               </div>
-             ))}
+                     <div className="relative h-40 bg-gray-100">
+                       {/* eslint-disable-next-line @next/next/no-img-element */}
+                       <img 
+                         src={getActivityImage(activity)} 
+                         alt={activity.name} 
+                         className="w-full h-full object-cover" 
+                       />
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); toggleFavorite(activity); }}
+                         className="absolute top-2 left-2 text-2xl drop-shadow-md active:scale-110 transition-transform"
+                       >
+                         {favorites.some(f => f.id === activity.id) ? '❤️' : '🤍'}
+                       </button>
+                     </div>
+                     <div className="p-4 flex-1 flex items-start">
+                       <h3 className="text-sm font-medium text-gray-700 line-clamp-2 leading-relaxed">{activity.name}</h3>
+                     </div>
+                   </div>
+                 ))}
+             </div>
+             <div className="flex-1 flex flex-col gap-4 pt-8">
+               {filteredActivities
+                 .filter(activity => 
+                   activity.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                   activity.materials.some(m => m.toLowerCase().includes(searchTerm.toLowerCase()))
+                 )
+                 .filter((_, i) => i % 2 !== 0)
+                 .map(activity => (
+                   <div 
+                     key={activity.id} 
+                     onClick={() => { setSuggestedActivity(activity); setView('activity'); }} 
+                     className="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col active:scale-95 transition-all"
+                   >
+                     <div className="relative h-40 bg-gray-100">
+                       {/* eslint-disable-next-line @next/next/no-img-element */}
+                       <img 
+                         src={getActivityImage(activity)} 
+                         alt={activity.name} 
+                         className="w-full h-full object-cover" 
+                       />
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); toggleFavorite(activity); }}
+                         className="absolute top-2 left-2 text-2xl drop-shadow-md active:scale-110 transition-transform"
+                       >
+                         {favorites.some(f => f.id === activity.id) ? '❤️' : '🤍'}
+                       </button>
+                     </div>
+                     <div className="p-4 flex-1 flex items-start">
+                       <h3 className="text-sm font-medium text-gray-700 line-clamp-2 leading-relaxed">{activity.name}</h3>
+                     </div>
+                   </div>
+                 ))}
+             </div>
            </div>
         </div>
       )}
@@ -586,13 +623,50 @@ export default function Home() {
         </div>
       )}
 
+      {view === 'settings' && activeProfile && (
+        <div className="flex-1 flex flex-col bg-gray-50 min-h-screen relative pb-32">
+           <header className="px-4 pt-8 pb-4 flex items-center justify-between bg-white sticky top-0 z-50">
+             <button onClick={() => setView('home')} className="text-3xl text-gray-400">←</button>
+             <h1 className="text-2xl font-bold text-gray-700 tracking-tight uppercase">SETTINGS</h1>
+             <div className="w-10 h-10"></div>
+           </header>
+
+           <div className="p-6 space-y-8">
+             <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 text-center">
+               <div className="w-24 h-24 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center text-6xl">
+                 {activeProfile.avatar || '👤'}
+               </div>
+               <h2 className="text-2xl font-black text-gray-800">{activeProfile.name}</h2>
+               <p className="text-gray-500 font-bold uppercase tracking-widest text-xs mt-1">{activeProfile.ageGroup}</p>
+             </div>
+
+             <button 
+               onClick={() => {
+                 if(confirm('Are you sure? This will delete your profile.')) {
+                    setProfiles([]);
+                    localStorage.removeItem('child_profiles');
+                    setView('onboarding');
+                 }
+               }}
+               className="w-full bg-white border-2 border-red-100 text-red-500 p-4 rounded-2xl font-bold flex items-center justify-between shadow-sm active:scale-95 transition-all"
+             >
+               <span>Reset Profile</span>
+               <span>🗑️</span>
+             </button>
+             
+             <div className="text-center text-gray-400 text-xs">
+               v1.4.1 • Offline Mode
+             </div>
+           </div>
+        </div>
+      )}
+
       {view === 'calendar' && activeProfile && (
         <CalendarView scheduledActivities={scheduledActivities.filter(sa => sa.childId === activeProfile.id)} onToggleComplete={toggleScheduleComplete} onAddActivity={(date) => { setPickingDate(date); setView('home'); }} onClose={() => setView('home')} />
       )}
 
       {view !== 'activity' && (
           <nav className="fixed bottom-6 left-6 right-6 h-20 bg-white/90 backdrop-blur-xl flex items-center justify-around px-6 z-50 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/50">
-            <button onClick={() => setView('home')} className={`text-3xl transition-all ${view === 'home' || view === 'browse' ? 'scale-110 drop-shadow-md' : 'opacity-50 grayscale'}`}>🏠</button>
             <button onClick={() => setView('calendar')} className={`text-3xl transition-all ${view === 'calendar' ? 'scale-110 drop-shadow-md' : 'opacity-50 grayscale'}`}>📅</button>
             
             <div className="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-500 rounded-full -mt-12 border-4 border-white flex items-center justify-center shadow-xl shadow-blue-300 active:scale-90 transition-all cursor-pointer" onClick={() => handleSuggest('Creative', 'Medium')}>
