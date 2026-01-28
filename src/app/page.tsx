@@ -701,12 +701,7 @@ export default function Home() {
              <div className="w-full space-y-4 pt-4">
                {/* Yearly Plan */}
                <button 
-                 onClick={() => {
-                   setIsPremium(true);
-                   localStorage.setItem('is_premium', JSON.stringify(true));
-                   setView('home');
-                   alert('Welcome to Premium! 🎉');
-                 }}
+                 onClick={() => handlePayment('yearly')}
                  className="w-full bg-white text-blue-600 p-6 rounded-3xl shadow-xl active:scale-95 transition-all flex items-center justify-between group"
                >
                  <div className="text-left">
@@ -721,12 +716,7 @@ export default function Home() {
 
                {/* Monthly Plan */}
                <button 
-                 onClick={() => {
-                   setIsPremium(true);
-                   localStorage.setItem('is_premium', JSON.stringify(true));
-                   setView('home');
-                   alert('Welcome to Premium! 🎉');
-                 }}
+                 onClick={() => handlePayment('monthly')}
                  className="w-full bg-blue-500/50 border border-blue-400 text-white p-6 rounded-3xl active:scale-95 transition-all flex items-center justify-between"
                >
                  <div className="text-left">
