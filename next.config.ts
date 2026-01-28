@@ -11,6 +11,7 @@ const withPWA = require("next-pwa")({
 
 const nextConfig: NextConfig = {
   output: 'export',
+  productionBrowserSourceMaps: false, // Disable source maps for security
   /* config options here */
 };
 
