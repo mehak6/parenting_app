@@ -1,6 +1,6 @@
 {
   "name": "parenting-companion",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
@@ -14,6 +14,7 @@
     "@capacitor/cli": "^8.0.1",
     "@capacitor/core": "^8.0.1",
     "@google/generative-ai": "^0.24.1",
+    "cordova-plugin-purchase": "^13.12.1",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
     "next": "16.1.2",

@@ -12,6 +12,7 @@ import { activities } from '../data/activities';
 import { getActivityImage } from '../lib/activity-helpers';
 
 import { generateActivity } from './actions';
+import { initializeStore, purchaseProduct, PRODUCT_IDS } from '../lib/payment';
 
 const AGE_GROUPS = [
   { label: 'Tiny Steps', value: '12-24m', desc: '12-24m' },
@@ -45,6 +46,36 @@ export default function Home() {
       | { type: 'filter'; scenario: 'Travel' | 'Restaurant' | 'Rainy' | 'Meltdown' }
       | null
     >(null);
+
+    // Initialize Store
+    useEffect(() => {
+      initializeStore(
+        () => {
+          // Success Callback
+          setIsPremium(true);
+          localStorage.setItem('is_premium', JSON.stringify(true));
+          alert("Purchase Successful! Premium features unlocked.");
+          setView('home');
+        },
+        (err) => console.error("Payment Init Error:", err)
+      );
+    }, []);
+
+    const handlePayment = (plan: 'yearly' | 'monthly') => {
+      // For testing in web browser, we can simulate success or fail.
+      // In production, remove this simulation block.
+      if (typeof window !== 'undefined' && !(window as any).CdvPurchase) {
+        if (confirm("Simulate successful payment? (This dialog only appears in dev/web mode)")) {
+           setIsPremium(true);
+           localStorage.setItem('is_premium', JSON.stringify(true));
+           setView('home');
+        }
+        return;
+      }
+
+      const productId = plan === 'yearly' ? PRODUCT_IDS.YEARLY : PRODUCT_IDS.MONTHLY;
+      purchaseProduct(productId);
+    };
 
     // Handle Hardware Back Button
     useEffect(() => {
