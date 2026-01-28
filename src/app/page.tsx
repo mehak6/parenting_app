@@ -763,9 +763,23 @@ export default function Home() {
 
              <button 
                onClick={() => {
+                 setIsPremium(false);
+                 localStorage.removeItem('is_premium');
+                 alert('Subscription Reset (Locked).');
+               }}
+               className="w-full bg-white border-2 border-orange-100 text-orange-500 p-4 rounded-2xl font-bold flex items-center justify-between shadow-sm active:scale-95 transition-all"
+             >
+               <span>Lock App (Reset Sub)</span>
+               <span>🔒</span>
+             </button>
+
+             <button 
+               onClick={() => {
                  if(confirm('Are you sure? This will delete your profile.')) {
                     setProfiles([]);
                     localStorage.removeItem('child_profiles');
+                    localStorage.removeItem('is_premium');
+                    setIsPremium(false);
                     setView('onboarding');
                  }
                }}
