@@ -27,13 +27,14 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const [showSplash, setShowSplash] = useState(true);
     const [generating, setGenerating] = useState(false);
-    const [view, setView] = useState<'home' | 'activity' | 'calendar' | 'onboarding' | 'browse' | 'favorites' | 'settings'>('home');
+    const [view, setView] = useState<'home' | 'activity' | 'calendar' | 'onboarding' | 'browse' | 'favorites' | 'settings' | 'subscription'>('home');
     const [suggestedActivity, setSuggestedActivity] = useState<Activity | null>(null);
     const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
     const [favorites, setFavorites] = useState<Activity[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [dailyPick, setDailyPick] = useState<Activity | null>(null);
     const [feedbackStats, setFeedbackStats] = useState<{positive: number, negative: number}>({ positive: 0, negative: 0 });
+    const [isPremium, setIsPremium] = useState(false);
     
     // const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]); // Removed multi-select
     const [scheduledActivities, setScheduledActivities] = useState<ScheduledActivity[]>([]);
@@ -98,6 +99,9 @@ export default function Home() {
       const savedFeedback = localStorage.getItem('feedback_stats');
       if (savedFeedback) setFeedbackStats(JSON.parse(savedFeedback));
       
+      const savedPremium = localStorage.getItem('is_premium');
+      if (savedPremium) setIsPremium(JSON.parse(savedPremium));
+
       // Set Daily Pick
       setDailyPick(activities[Math.floor(Math.random() * activities.length)]);
       
@@ -512,31 +516,44 @@ export default function Home() {
                    activity.materials.some(m => m.toLowerCase().includes(searchTerm.toLowerCase()))
                  )
                  .filter((_, i) => i % 2 === 0)
-                 .map(activity => (
+                 .map((activity, colIndex) => {
+                   const globalIndex = colIndex * 2;
+                   const isLocked = !isPremium && globalIndex >= 6;
+                   
+                   return (
                    <div 
                      key={activity.id} 
-                     onClick={() => { setSuggestedActivity(activity); setView('activity'); }} 
-                     className="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col active:scale-95 transition-all"
+                     onClick={() => { 
+                       if (isLocked) setView('subscription');
+                       else { setSuggestedActivity(activity); setView('activity'); }
+                     }} 
+                     className="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col active:scale-95 transition-all relative"
                    >
                      <div className="relative h-40 bg-gray-100">
-                       {/* eslint-disable-next-line @next/next/no-img-element */}
                        <img 
                          src={getActivityImage(activity)} 
                          alt={activity.name} 
-                         className="w-full h-full object-cover" 
+                         className={`w-full h-full object-cover ${isLocked ? 'grayscale blur-[2px]' : ''}`} 
                        />
+                       {isLocked && (
+                         <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                           <span className="text-4xl">🔒</span>
+                         </div>
+                       )}
+                       {!isLocked && (
                        <button 
                          onClick={(e) => { e.stopPropagation(); toggleFavorite(activity); }}
                          className="absolute top-2 left-2 text-2xl drop-shadow-md active:scale-110 transition-transform"
                        >
                          {favorites.some(f => f.id === activity.id) ? '❤️' : '🤍'}
                        </button>
+                       )}
                      </div>
                      <div className="p-4 flex-1 flex items-start">
                        <h3 className="text-sm font-medium text-gray-700 line-clamp-2 leading-relaxed">{activity.name}</h3>
                      </div>
                    </div>
-                 ))}
+                 )})}
              </div>
              <div className="flex-1 flex flex-col gap-4 pt-8">
                {filteredActivities
@@ -545,31 +562,44 @@ export default function Home() {
                    activity.materials.some(m => m.toLowerCase().includes(searchTerm.toLowerCase()))
                  )
                  .filter((_, i) => i % 2 !== 0)
-                 .map(activity => (
+                 .map((activity, colIndex) => {
+                   const globalIndex = colIndex * 2 + 1;
+                   const isLocked = !isPremium && globalIndex >= 6;
+
+                   return (
                    <div 
                      key={activity.id} 
-                     onClick={() => { setSuggestedActivity(activity); setView('activity'); }} 
-                     className="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col active:scale-95 transition-all"
+                     onClick={() => { 
+                        if (isLocked) setView('subscription');
+                        else { setSuggestedActivity(activity); setView('activity'); }
+                     }} 
+                     className="bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col active:scale-95 transition-all relative"
                    >
                      <div className="relative h-40 bg-gray-100">
-                       {/* eslint-disable-next-line @next/next/no-img-element */}
                        <img 
                          src={getActivityImage(activity)} 
                          alt={activity.name} 
-                         className="w-full h-full object-cover" 
+                         className={`w-full h-full object-cover ${isLocked ? 'grayscale blur-[2px]' : ''}`} 
                        />
+                       {isLocked && (
+                         <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                           <span className="text-4xl">🔒</span>
+                         </div>
+                       )}
+                       {!isLocked && (
                        <button 
                          onClick={(e) => { e.stopPropagation(); toggleFavorite(activity); }}
                          className="absolute top-2 left-2 text-2xl drop-shadow-md active:scale-110 transition-transform"
                        >
                          {favorites.some(f => f.id === activity.id) ? '❤️' : '🤍'}
                        </button>
+                       )}
                      </div>
                      <div className="p-4 flex-1 flex items-start">
                        <h3 className="text-sm font-medium text-gray-700 line-clamp-2 leading-relaxed">{activity.name}</h3>
                      </div>
                    </div>
-                 ))}
+                 )})}
              </div>
            </div>
         </div>
@@ -620,6 +650,66 @@ export default function Home() {
                ))}
              </div>
            )}
+        </div>
+      )}
+
+      {view === 'subscription' && (
+        <div className="flex-1 flex flex-col bg-blue-600 min-h-screen relative p-6 text-white overflow-hidden">
+           <button onClick={() => setView('home')} className="absolute top-6 left-4 text-3xl z-10 opacity-80 hover:opacity-100">✕</button>
+           
+           <div className="flex-1 flex flex-col items-center justify-center text-center space-y-6 animate-in zoom-in duration-500">
+             <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center text-6xl backdrop-blur-md shadow-xl">
+               💎
+             </div>
+             
+             <div>
+               <h1 className="text-3xl font-black mb-2">Unlock Full Access</h1>
+               <p className="text-blue-100 font-medium px-8">Get unlimited access to 100+ premium activities for your child&apos;s growth.</p>
+             </div>
+
+             <div className="w-full space-y-4 pt-4">
+               {/* Yearly Plan */}
+               <button 
+                 onClick={() => {
+                   setIsPremium(true);
+                   localStorage.setItem('is_premium', JSON.stringify(true));
+                   setView('home');
+                   alert('Welcome to Premium! 🎉');
+                 }}
+                 className="w-full bg-white text-blue-600 p-6 rounded-3xl shadow-xl active:scale-95 transition-all flex items-center justify-between group"
+               >
+                 <div className="text-left">
+                   <div className="text-xs font-bold uppercase tracking-wider text-blue-400">Best Value</div>
+                   <div className="text-2xl font-black">1 Year</div>
+                 </div>
+                 <div className="text-right">
+                   <div className="text-2xl font-black">₹1200</div>
+                   <div className="text-xs font-bold text-green-500">Save 20%</div>
+                 </div>
+               </button>
+
+               {/* Monthly Plan */}
+               <button 
+                 onClick={() => {
+                   setIsPremium(true);
+                   localStorage.setItem('is_premium', JSON.stringify(true));
+                   setView('home');
+                   alert('Welcome to Premium! 🎉');
+                 }}
+                 className="w-full bg-blue-500/50 border border-blue-400 text-white p-6 rounded-3xl active:scale-95 transition-all flex items-center justify-between"
+               >
+                 <div className="text-left">
+                   <div className="text-xs font-bold uppercase tracking-wider text-blue-200">Flexible</div>
+                   <div className="text-xl font-bold">1 Month</div>
+                 </div>
+                 <div className="text-right">
+                   <div className="text-xl font-bold">₹99</div>
+                 </div>
+               </button>
+             </div>
+
+             <p className="text-xs text-blue-200 mt-4">Recurring billing. Cancel anytime.</p>
+           </div>
         </div>
       )}
 
